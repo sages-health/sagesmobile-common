@@ -2,6 +2,7 @@ package edu.jhuapl.sages.mobile.lib.app.tests.crypto;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 
 import android.content.Context;
 import android.os.Environment;
@@ -43,7 +44,7 @@ public class SagesKeyTest extends AndroidTestCase {
 		}
 	}
 	
-	public void testSimpleKey(){
+	public void testSimpleKeySave(){
 		assertTrue(true);
 		keyStoreFile = new File(Environment.getExternalStorageDirectory() + "/sageslib_testout");
 		
@@ -66,7 +67,7 @@ public class SagesKeyTest extends AndroidTestCase {
 		}
 	}
 	
-	public void testSagesPublicKey() throws UnsupportedEncodingException{
+	public void testSagesPublicKeySaveGetAsString() throws UnsupportedEncodingException{
 		
 		String testKey = "PUBLIC KEY".concat(testData);
 				
@@ -84,14 +85,37 @@ public class SagesKeyTest extends AndroidTestCase {
 			
 			assertEquals(testKey, new String (key.getData()));
 			assertEquals(testKey.getBytes().length, key.getData().length);
-			assertEquals(testKey.getBytes("UTF-8"), key.getData());
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	public void testSagesPublicKeySaveGetBytes() throws UnsupportedEncodingException{
+		
+		String testKey = "PUBLIC KEY".concat(testData);
+		
+		SagesPublicKey publickey = new SagesPublicKey(context, "5554", new String[]{""}, testKey.getBytes(/*"UTF-8"*/));
+		try {
+			publickey.saveKey(keyStoreFile.getAbsolutePath());
+		} catch (SagesKeyException e) {
+			e.printStackTrace();
+			fail();
+		}
+		String locationId = "5554";
+		try {
+			SagesPublicKey key = (SagesPublicKey) SagesKey.loadKey(keyStoreFile.getPath(), locationId, KeyEnum.PUBLIC);
+			
+			
+			assertEquals(testKey, new String (key.getData()));
+			assertEquals(testKey.getBytes().length, key.getData().length);
+			assertTrue(Arrays.equals(testKey.getBytes("UTF-8"), key.getData()));
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
 		}
 	}
 	
-	public void testSagesPrivateKey(){
+	public void testSagesPrivateKeySaveGetAsString(){
 		SagesPrivateKey privateKey = new SagesPrivateKey(context, "5554", new String[]{""}, "PRIVATE KEY".concat(testData).getBytes());
 		try {
 			privateKey.saveKey(keyStoreFile.getAbsolutePath());
