@@ -26,18 +26,38 @@ public class SagesKeyStoreTest extends AndroidTestCase {
 		context = getContext();
 		File file = new File(keystorepath_sdcard);
 		try {
-			delete(file);
+			if (file.exists())
+				delete(file);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public void testCreateDir() throws IOException{
+	public void testCreateNewDir() throws IOException{
 		File file = new File(keystorepath_sdcard);
 		assertFalse(file.exists());
 		assertTrue(file.mkdir());
 		assertTrue(file.isDirectory());
 		delete(file);
+	}
+	
+	public void testNullFile() {
+		try {
+			SagesKeyStore nullStore = new SagesKeyStore(null);
+			fail("SagesKeyException should have been thrown for a null file parameter.");
+		} catch (SagesKeyException e) {
+		}  
+	}
+	
+	public void testNewStoreWhenAlreadyExists() {
+		File file = new File(keystorepath_sdcard);
+		try {
+			SagesKeyStore newStore = new SagesKeyStore(file);
+			newStore = new SagesKeyStore(file);
+		} catch (SagesKeyException e) {
+			e.printStackTrace();
+			fail("If store already was created in this location no exceptions should occur.");
+		}  
 	}
 	
 	public void testNewKeyStoreAddAndGetKey(){
@@ -61,6 +81,14 @@ public class SagesKeyStoreTest extends AndroidTestCase {
 			}
 		}
 		
+		
+	}
+	
+	/**
+	 * should not happen in production -- but with file saved to sdcard, the directory could be deleted.
+	 * Keystore should always check for existence of its underlying file?
+	 */
+	public void testDeleteKeyStoreFileSaveKey(){
 		
 	}
 	
