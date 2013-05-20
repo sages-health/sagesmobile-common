@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <Button 
+        android:id="@+id/btn_genkey"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/generate_keys"
+     />
+    
+    <TextView 
+        android:id="@+id/txt_privateKey"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/txt_publicKey"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView 
+        android:id="@+id/txt_messageclear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView 
+        android:id="@+id/txt_msg_encrypted"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView 
+        android:id="@+id/txt_msg_decrypted"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    
+    <Button 
+        android:id="@+id/btn_send_aes_key"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/send_aes_key"
+     />
+
+    <Button 
+        android:id="@+id/btn_ecnrypt_send_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ecnrypt_send_msg"
+     />
+
+
+</LinearLayout>
