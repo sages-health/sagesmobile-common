@@ -17,5 +17,6 @@ public interface KeyStoreI {
 	public Map<KeyEnum, SagesKey> lookupKeys(String agentId) throws SagesKeyException;
 	public Map<KeyEnum, SagesKey> lookupKeys(SagesContact contact) throws SagesKeyException;
 	public void addKey(SagesKey key) throws SagesKeyException;
+	public void removeAllKeysFor(String agentId) throws SagesKeyException;
 	
 }

@@ -15,9 +15,11 @@ public class SagesMessage implements SagesMessageI {
 	public static final String DELIM_HeaderToBody = "|";
 
 	public static final String key_exch = "key_exch";
+	public static final String data = "data";
 	public static final String init = "init";
 	public static final String reply = "reply";
 	public static final String my_key = "my_key";
+	public static final String enc_aes = "enc aes";
 	
 	public enum MsgTypeEnum {
 		KEY_EXCH, DATA, STATUS
@@ -116,6 +118,8 @@ public class SagesMessage implements SagesMessageI {
 		this.header.setHeader(rawMsg.substring(0, hdrindx));
 		if (this.header.getHeader().contains(SagesMessage.key_exch)){
 			this.msgType = msgType.KEY_EXCH;
+		} else if (this.header.getHeader().contains(SagesMessage.data)){
+			this.msgType = msgType.DATA;
 		}
 		return this.header;
 	}

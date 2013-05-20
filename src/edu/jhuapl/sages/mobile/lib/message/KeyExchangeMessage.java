@@ -2,6 +2,7 @@ package edu.jhuapl.sages.mobile.lib.message;
 
 import edu.jhuapl.sages.mobile.lib.crypto.persisted.SagesKey;
 import edu.jhuapl.sages.mobile.lib.crypto.persisted.SagesKeyException;
+import edu.jhuapl.sages.mobile.lib.crypto.persisted.SagesPrivateKey;
 import edu.jhuapl.sages.mobile.lib.crypto.persisted.SagesPublicKey;
 
 /**
@@ -26,7 +27,11 @@ public class KeyExchangeMessage extends SagesMessage {
 	@Override
 	public void processRawMessage(String rawMsg) throws SagesKeyException {
 		super.processRawMessage(rawMsg);
+		if (rawMsg.contains("aes")){
+			processKeyFromBody("aes", super.getBody());
+		} else {
 		processKeyFromBody(super.getBody());
+		}
 	};
 
 	private void processKeyFromBody(SagesMessageBody body) throws SagesKeyException {
@@ -37,6 +42,24 @@ public class KeyExchangeMessage extends SagesMessage {
 			String keyText = (body.getBody()).substring(SagesMessage.my_key.length());
 			SagesPublicKey pubKey =  new SagesPublicKey(null, this.getSender(), null, keyText.getBytes());
 			this.setKey(pubKey);
+		} else {
+			throw new SagesKeyException("key exchange message is missing the sender's key");
+		}
+	}
+	
+	private void processKeyFromBody(String keyType, SagesMessageBody body) throws SagesKeyException {
+		if (this.getSender() == null){
+			throw new SagesKeyException("Null value for sender of the key. Unable to process key for a sender.");
+		}
+		SagesKey key = null;
+		if (body.getBody().contains(SagesMessage.my_key)){
+			String keyText = (body.getBody()).substring(SagesMessage.my_key.length());
+			if (keyType.contains("aes")){
+				key = new SagesPrivateKey(null, this.getSender(), null, keyText.getBytes());
+			} else {
+				key =  new SagesPublicKey(null, this.getSender(), null, keyText.getBytes());
+			}
+			this.setKey(key);
 		} else {
 			throw new SagesKeyException("key exchange message is missing the sender's key");
 		}

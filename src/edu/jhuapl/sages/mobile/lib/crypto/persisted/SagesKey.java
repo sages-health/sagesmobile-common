@@ -1,9 +1,7 @@
 package edu.jhuapl.sages.mobile.lib.crypto.persisted;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
@@ -113,6 +111,7 @@ public class SagesKey {
 		}
 		return fileraw;
 	}
+	
 	
 	protected void writeKeytoFile(File file) throws IOException{
 	/*	FileOutputStream out = new FileOutputStream(file);  

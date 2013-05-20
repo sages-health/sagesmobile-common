@@ -16,12 +16,13 @@ public class MessageBuilderUtil {
 		switch (msgType){
 		case KEY_EXCH: 
 			String stage = (params.contains(SagesMessage.init)) ? SagesMessage.init : SagesMessage.reply;   
+			stage = (params.contains("aes")) ? SagesMessage.init + " aes" : SagesMessage.init;
 			testHeader = SagesMessage.key_exch + " " + stage + SagesMessage.DELIM_HeaderToBody;
 			break;
 		case STATUS:
 			testHeader = SagesMessage.DELIM_HeaderToBody;
 		case DATA:
-			testHeader = SagesMessage.DELIM_HeaderToBody;
+			testHeader = SagesMessage.data + " " + SagesMessage.enc_aes + " " + SagesMessage.DELIM_HeaderToBody;
 			break;
 		}
 		return testHeader;

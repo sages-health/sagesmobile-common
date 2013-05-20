@@ -1,5 +1,6 @@
 package edu.jhuapl.sages.mobile.lib.message;
 
+
 /**
  * 
  * @author pokuam1
@@ -13,6 +14,6 @@ public class StatusMessage extends SagesMessage {
 	}
 
 	public StatusMessage(){
-		super(MsgTypeEnum.STATUS, null, null);
+		super(MsgTypeEnum.STATUS, new SagesMessageHeader(null), new SagesMessageBody(null));
 	}
 }
