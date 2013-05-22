@@ -8,6 +8,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import android.util.Log;
+
+import edu.jhuapl.sages.mobile.lib.crypto.persisted.SagesKeyException;
+import edu.jhuapl.sages.mobile.lib.message.SagesMessage;
+import edu.jhuapl.sages.mobile.lib.odk.DataChunker;
+
 
 /**
  * Demodulates a concatenated message (a blob). Takes the complete concatenated message that adheres to the SAGES multisms syntax scheme, and 
@@ -51,8 +57,41 @@ public class Demodulator {
 	 * @return Array of the individual form values that were in the blob
 	 */
 	public static String[] demod(String blob){
+		/**
+		 * 1. check meta-data header for: isEncrypted, encryptionAlgo
+		 * 2. b64Decode
+		 * 3. decrypt
+		 */
+		String data_enc_aes_hdr = SagesMessage.data + " " + SagesMessage.enc_aes + SagesMessage.DELIM_HeaderToBody; 
+		if (blob.startsWith(data_enc_aes_hdr)){
+			blob = blob.substring(data_enc_aes_hdr.length());
+			
+			byte[] b64DecodedBlob = DataChunker.base64DecodeCipherGo(blob.getBytes());
+			byte[] blobCipherDecrypted;
+			try {
+				blobCipherDecrypted = DataChunker.decryptDataGo(b64DecodedBlob);
+				blob = new String(blobCipherDecrypted);
+			} catch (SagesKeyException e) {
+				e.printStackTrace();
+				Log.e(Demodulator.class.getCanonicalName(), e.getMessage());
+			}
+		}
 		blob = blob.startsWith(splitQualifier) ? blob.substring(1) : blob;
 		String[] demodedBlob = blob.split(splitQualifier);
 		return demodedBlob;
 	}
+/*	
+ * ORIGINAL VERSION: WITHOUT b64DECODING/DECRYPTION
+	*//**
+	 * Demodulates a blob (concatenated message adhering to the SAGES multisms syntax)
+	 * @param blob
+	 * @return Array of the individual form values that were in the blob
+	 *//*
+	public static String[] demod(String blob){
+		blob = blob.startsWith(splitQualifier) ? blob.substring(1) : blob;
+		String[] demodedBlob = blob.split(splitQualifier);
+		return demodedBlob;
+	}
+	
+*/	
 }

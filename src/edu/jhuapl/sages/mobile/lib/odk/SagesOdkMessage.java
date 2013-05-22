@@ -10,9 +10,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import android.util.Log;
+import edu.jhuapl.sages.mobile.lib.message.SagesMessage;
 
 public class SagesOdkMessage extends SagesSmsMessage{
 
+	// kdf . 1 MmmmnnnnnnnmmmmmmmmmmmmmmmmMmmmnnnnnnnmmmmmmmmmmmmmmmmMmmmnnnnnnnmmmmmmmmmmmmmmmmMmmmnnnnnnnmmmmmmmmmmmmmmmmMmmmnnnnnnnmmmmmmmmmmmmmmmm 2013-05-20 1 0 1 2 99 58.0 58 36 88 45.0 ' 1 2 3 4 5 6 7 8 ' 1 ' 1 2 3 4 5 6 7 8 9 10 11 12 13 '
 	protected String t = SagesOdkMessage.class.getCanonicalName();
 	protected String formId = "formId"; //TODO need to pass this in during creation
 	protected String txIdCur = null; //TODO need to pass this in during creation
@@ -29,6 +31,7 @@ public class SagesOdkMessage extends SagesSmsMessage{
 	private SagesOdkHeader sagesrefOdk_header;
 	private ArrayList<String> dividedBlob;
 	
+	private boolean isEncrypted;
 	
 	public SagesOdkMessage(String smsText, String formId, String txIdCur){
 		super(smsText, formId, txIdCur);
@@ -47,12 +50,17 @@ public class SagesOdkMessage extends SagesSmsMessage{
 	}
 
 	private void processSmsText(String smsText) {
+		
+		isEncrypted = true;
+		
+		/**
+		 * No need to do this portion if code is being encrypted and base64 encoded
+		 */
 		Pattern pattern = Pattern.compile("([\\P{InBasic Latin}]+)");
 		Matcher matcher = pattern.matcher(smsText);
 		boolean containsUnicode = matcher.find();
 		System.out.println("did it match? " + containsUnicode);
 
-		
         int blobLength = smsText.length();
         ArrayList<String> dividedBlob = null;
         
@@ -60,7 +68,7 @@ public class SagesOdkMessage extends SagesSmsMessage{
         	if ("multisms".equals(formId)){
         		smsText.replaceFirst(formId, "");
         	} else {
-        		// prepare for header: segNum,totSegs,txID:#formID
+        		// prepare for header: segNum,totSegs,txID:#formID  //TODO - THIS IS DOING ANYTHING--RA STILL WORKS THOUGH FOR SIMPLE USE CASE
         		smsText.replaceFirst(formId, "#" + formId);
         	}
         	try {
@@ -76,6 +84,18 @@ public class SagesOdkMessage extends SagesSmsMessage{
         		Log.d(t, "Text length= " + smsText.length());
         		MULTIPART_SMS_SIZE = 120;
         		ENCODING_SMS_SIZE = 70;
+        	}
+        	
+        	if (isEncrypted){
+        		byte[] smsTextData = DataChunker.encryptDataGo(smsText);
+        		byte[] b64SmsTextData = DataChunker.base64EncodeCipherGo(smsTextData);
+        		
+        		/** 
+        		 *  Add The "meta-data header" ex. :data enc aes|
+	        		seg_index|segs_tot|tx_id:data enc aes|here goes the message text here it all goes
+        		 *  TODO: pokuam1 turn this into a method
+        		 ***/
+        		smsText = SagesMessage.data + " " + SagesMessage.enc_aes + SagesMessage.DELIM_HeaderToBody + new String(b64SmsTextData);
         	}
         	dividedBlob = divideTextAddHeader(smsText, MULTIPART_SMS_SIZE, ENCODING_SMS_SIZE, formId);
         	} catch (Exception e){

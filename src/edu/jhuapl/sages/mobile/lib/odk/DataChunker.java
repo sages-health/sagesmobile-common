@@ -3,11 +3,24 @@
  */
 package edu.jhuapl.sages.mobile.lib.odk;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.Security;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.crypto.NoSuchPaddingException;
+
+import  org.spongycastle.jce.provider.BouncyCastleProvider;
+
+import org.spongycastle.util.encoders.Base64;
+
+import edu.jhuapl.sages.mobile.lib.SharedObjects;
+import edu.jhuapl.sages.mobile.lib.crypto.engines.CryptoEngine;
+import edu.jhuapl.sages.mobile.lib.crypto.persisted.SagesKeyException;
+
 
 /**
  * @author POKUAM1
@@ -15,6 +28,14 @@ import java.util.Map;
  */
 public class DataChunker {
 
+	static {
+		// https://github.com/rtyley/spongycastle/issues/10
+		// Adds a new provider, at a specified position
+//	    Security.insertProviderAt(new org.spongycastle.jce.provider.BouncyCastleProvider(), 1);
+	    
+		Security.removeProvider(new org.spongycastle.jce.provider.BouncyCastleProvider().getName());
+		Security.addProvider(new org.spongycastle.jce.provider.BouncyCastleProvider());
+	}
 	private String txId;
 
 	public String getTxId(){
@@ -224,6 +245,131 @@ public class DataChunker {
 			i++;
 		}
 
+		return payload;
+	}
+	
+	/**
+	 * just passes the smsText as byte[] -- DOES NOT ENCRYPT YET
+	 * @param smsText
+	 * @return
+	 * @throws SagesKeyException 
+	 */
+	public static byte[] encryptDataGo(String smsText) throws SagesKeyException{
+		byte[] cipher = null;
+		try {
+			CryptoEngine cryptoEngine = SharedObjects.getCryptoEngine();
+			
+			cipher = cryptoEngine.encrypt(smsText.getBytes());
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+			throw new SagesKeyException(e.getMessage());
+		} catch (NoSuchPaddingException e) {
+			e.printStackTrace();
+			throw new SagesKeyException(e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new SagesKeyException(e.getMessage());
+		} 
+		
+		return cipher;
+	}
+	
+	/**
+	 * just returns the original cipher -- DOES NOT DECRYPT YET
+	 * @param cipher
+	 * @return
+	 * @throws SagesKeyException 
+	 */
+	public static byte[] decryptDataGo(byte[] cipher) throws SagesKeyException{
+		byte[] decryptedData = null;
+		try {
+			CryptoEngine cryptoEngine = SharedObjects.getCryptoEngine();
+			decryptedData = cryptoEngine.decrypt(cipher);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+			throw new SagesKeyException(e.getMessage());
+		} catch (NoSuchPaddingException e) {
+			e.printStackTrace();
+			throw new SagesKeyException(e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new SagesKeyException(e.getMessage());
+
+		}
+		return decryptedData;
+	}
+	
+	/**
+	 * Base64 encodes the cipher
+	 *  
+	 * @param cipher
+	 * @return
+	 */
+	public static byte[] base64EncodeCipherGo(byte[] cipher){
+		return Base64.encode(cipher);
+	}
+	
+	
+	/**
+	 * Decodes the base64 encoded cipher
+	 * @param b64encodedCipher
+	 * @return 
+	 */
+	public static byte[] base64DecodeCipherGo(byte[] b64encodedCipher){
+		return Base64.decode(b64encodedCipher);
+	}
+	public Map<String, String> chunkDataWithHeaderGo1(String data, int segSize, int allowedInfoSize /* , String formId */) {
+		Map<String, String> payload = new HashMap<String, String>();
+		
+		
+		String smsText = data;
+		int numSegs = (int) Math.ceil(smsText.length() / (double) allowedInfoSize);
+		int expectedChunks = numSegs;
+		int chunkLength = segSize;
+		int infoLength = allowedInfoSize; //ex. 130
+		int start = 0;
+		int end = segSize -1;
+		
+		
+		System.out.println("Exptected Chunks: " + expectedChunks);
+		System.out.println(data);
+		String[] chunks = new String[expectedChunks];
+		int hdrLength = chunkLength - infoLength;
+		int beginIndex = 0;
+		int endIndex = beginIndex + infoLength;
+		int i = 0;
+		// String txId = getTxID(); //TODO
+		String txId = generateTxID_Calendar();
+		this.txId = txId;
+		
+		String trailText = "";
+		int trailIndex = -1;
+		// String header = i + "," + chunks.length + "," + txId + ":" + formId +
+		// "#" ;
+		String header = "HEADER";
+		String SYMBOL = "|";
+		while (endIndex <= data.length()) {
+			header = (i + 1) + SYMBOL + chunks.length + SYMBOL + txId + ":";
+			System.out.println("header[" + header.length() + "], data[" + data.substring(beginIndex, endIndex).length() + "]");
+			chunks[i] = data.substring(beginIndex, endIndex);
+			payload.put(header, chunks[i]);
+			trailIndex = endIndex;
+			i++;
+			beginIndex += infoLength;
+			endIndex += infoLength;
+		}
+		if (trailIndex > -1 && trailIndex < data.length()) {
+			header = (i + 1) + SYMBOL + chunks.length + SYMBOL + txId + ":";
+			chunks[i] = data.substring(trailIndex);
+			payload.put(header, chunks[i]);
+			System.out.println("header[" + header.length() + "], data[" + data.substring(beginIndex).length() + "]");
+		}
+		i = 1;
+		for (String chunk : chunks) {
+			System.out.println("CHUNK[" + chunk.length() + "] " + i + ": " + chunk);
+			i++;
+		}
+		
 		return payload;
 	}
 
