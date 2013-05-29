@@ -183,6 +183,25 @@ public class DataChunker {
 		return payload;
 	}
 
+	/**
+		Calculates the write segment length that will allow the sages-multipart message header to be prefixed and still fit under 
+		the SMS character limit length (160 chars v 140 chars v 70 chars)
+		
+		Current calculations are very conservative and may waste space. This should be revisited.
+		
+		Header has format => seg_index|total_segs|txId:
+		The expected maximum header length is 18 characters, assuming we would never send more than 999 segments:
+		       999|999|365240000:
+	
+		Example usage:
+				Map<String,String> s = dchunker.chunkDataWithHeaderGo(smsText, segSize, allowedInfoSize);
+
+	
+	 * @param data
+	 * @param segSize - length of SMS given the encoding of data (7bit, 8bit, 16bit -> 160char, 140char, 70char)
+	 * @param allowedInfoSize - space for actual data not including the prefixed sages-header for multi-part messags
+	 * @return Map<header, multi-part segment>
+	 */
 	public Map<String, String> chunkDataWithHeaderGo(String data, int segSize, int allowedInfoSize /* , String formId */) {
 		Map<String, String> payload = new HashMap<String, String>();
 //		int chunkLength = 160;
@@ -208,13 +227,20 @@ public class DataChunker {
 		int beginIndex = 0;
 		int endIndex = beginIndex + infoLength;
 		int i = 0;
-		// String txId = getTxID(); //TODO
+
 		String txId = generateTxID_Calendar();
 		this.txId = txId;
 
-		String trailText = "";
 		int trailIndex = -1;
-		// String header = i + "," + chunks.length + "," + txId + ":" + formId +
+		
+		/**
+		   Header has format => seg_index|total_segs|txId:
+		   The expected maximum header length is 18 characters, assuming we would never send more than 999 segments:
+		       999|999|365240000:
+		  
+		   String header = i + "," + chunks.length + "," + txId + ":" + formId +
+		 */
+
 		// "#" ;
 		String header = "HEADER";
 		String SYMBOL = "|";
@@ -249,9 +275,10 @@ public class DataChunker {
 	}
 	
 	/**
-	 * just passes the smsText as byte[] -- DOES NOT ENCRYPT YET
+	 * ENCRYPTS WITH HARDCODED 128-bit AES symmetric key in {@link SharedObjects}
+	 * 
 	 * @param smsText
-	 * @return
+	 * @return encrypted data as byte array
 	 * @throws SagesKeyException 
 	 */
 	public static byte[] encryptDataGo(String smsText) throws SagesKeyException{
@@ -275,9 +302,9 @@ public class DataChunker {
 	}
 	
 	/**
-	 * just returns the original cipher -- DOES NOT DECRYPT YET
+	 * DECRYPTS WITH HARDCODED 128-bit AES symmetric key in {@link SharedObjects}
 	 * @param cipher
-	 * @return
+	 * @return decrypted data byte array
 	 * @throws SagesKeyException 
 	 */
 	public static byte[] decryptDataGo(byte[] cipher) throws SagesKeyException{
@@ -318,6 +345,14 @@ public class DataChunker {
 	public static byte[] base64DecodeCipherGo(byte[] b64encodedCipher){
 		return Base64.decode(b64encodedCipher);
 	}
+
+	/**
+	 * OLD VERSION DO NOT USE
+	 * @param data
+	 * @param segSize
+	 * @param allowedInfoSize
+	 * @return
+	 */
 	public Map<String, String> chunkDataWithHeaderGo1(String data, int segSize, int allowedInfoSize /* , String formId */) {
 		Map<String, String> payload = new HashMap<String, String>();
 		
@@ -344,7 +379,9 @@ public class DataChunker {
 		
 		String trailText = "";
 		int trailIndex = -1;
-		// String header = i + "," + chunks.length + "," + txId + ":" + formId +
+		
+
+		//String header = i + "," + chunks.length + "," + txId + ":" + formId +
 		// "#" ;
 		String header = "HEADER";
 		String SYMBOL = "|";
@@ -392,6 +429,15 @@ public class DataChunker {
 		dc.chunkData(data);
 	}
 
+	/**
+	 * Generates a unique transaction id derived from following Calendar values:
+	 * DAY_OF_YEAR(1-365), HOUR_OF_DAY(0-24), MINUTE(0-59), SECOND(0-59)
+	 * 
+	 * The min length of transaction id = 4
+	 * The max possible length of transaction id = 9 
+	 * 
+	 * @return transaction id (can range in length from 4 to 9 characters)
+	 */
 	public static String generateTxID() {
 		Calendar c = Calendar.getInstance();
 		Date d = c.getTime();
@@ -403,6 +449,15 @@ public class DataChunker {
 		return "" + year + doy + hr + min + ms;
 	}
 
+	/**
+	 * Generates a unique transaction id derived from following Calendar values:
+	 * DAY_OF_YEAR(1-365), HOUR_OF_DAY(0-24), MINUTE(0-59), SECOND(0-59)
+	 * 
+	 * The min length of transaction id = 4
+	 * The max possible length of transaction id = 9 
+	 * 
+	 * @return transaction id (can range in length from 4 to 9 characters)
+	 */
 	public static String generateTxID_Calendar() {
 		Calendar cal = new GregorianCalendar();
 		int dayOfYear = cal.get(Calendar.DAY_OF_YEAR);

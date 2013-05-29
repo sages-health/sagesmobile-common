@@ -35,23 +35,28 @@ public class SagesOdkMessage extends SagesSmsMessage{
 	
 	public SagesOdkMessage(String smsText, String formId, String txIdCur){
 		super(smsText, formId, txIdCur);
+		this.smsText = smsText;
 		this.formId = formId;
 		this.txIdCur = this.txIdCur;
-		
-		processSmsText(smsText);
 	}
 	
 	public SagesOdkMessage(String smsText){
 		super(smsText);
 		this.smsText = smsText;
 		this.size = smsText.length();
-		
-		processSmsText(smsText);
 	}
-
+	
+	/**
+	 * Configures the message so text processing happens appropriately
+	 * @param isEncrypted
+	 */
+	public void configure(boolean isEncrypted){
+		this.isEncrypted = isEncrypted;
+		processSmsText(this.smsText);
+	}
+	
 	private void processSmsText(String smsText) {
-		
-		isEncrypted = true;
+		ArrayList<String> dividedBlob = new ArrayList<String>();
 		
 		/**
 		 * No need to do this portion if code is being encrypted and base64 encoded
@@ -61,19 +66,14 @@ public class SagesOdkMessage extends SagesSmsMessage{
 		boolean containsUnicode = matcher.find();
 		System.out.println("did it match? " + containsUnicode);
 
-        int blobLength = smsText.length();
-        ArrayList<String> dividedBlob = null;
         
-        if (blobLength > 160 || containsUnicode) {
-        	if ("multisms".equals(formId)){
+        if ("multisms".equals(formId)){
         		smsText.replaceFirst(formId, "");
-        	} else {
-        		// prepare for header: segNum,totSegs,txID:#formID  //TODO - THIS IS DOING ANYTHING--RA STILL WORKS THOUGH FOR SIMPLE USE CASE
-        		smsText.replaceFirst(formId, "#" + formId);
-        	}
-        	try {
-//        	dividedBlob = divideText(smsText, 100);
-        	//MULTIPART_SMS_SIZE == 100;
+        } else {
+        	// prepare for header: segNum,totSegs,txID:#formID  //TODO - THIS IS DOING ANYTHING--RA STILL WORKS THOUGH FOR SIMPLE USE CASE
+        	smsText.replaceFirst(formId, "#" + formId);
+        }
+       	try {
         	if (containsUnicode){
         		Log.d(t, "Text has special characters beyone US ASCII. NEED TO SHRINK MSG.");
         		Log.d(t, "Text length= " + smsText.length());
@@ -82,8 +82,10 @@ public class SagesOdkMessage extends SagesSmsMessage{
         	} else {
         		Log.d(t, "GOOD NO special characters beyone US ASCII. SEND BIG FAT MSG.");
         		Log.d(t, "Text length= " + smsText.length());
-        		MULTIPART_SMS_SIZE = 120;
+        		MULTIPART_SMS_SIZE = 120; //ORIGINALLY HAVE DEPLOYED WITH 120 & 70
         		ENCODING_SMS_SIZE = 70;
+//        		MULTIPART_SMS_SIZE = 150; // EXPERIMENTAL LETS TRY TO GET CLOSER TO 160 (header ~20 chars)
+//        		ENCODING_SMS_SIZE = 130;
         	}
         	
         	if (isEncrypted){
@@ -96,20 +98,32 @@ public class SagesOdkMessage extends SagesSmsMessage{
         		 *  TODO: pokuam1 turn this into a method
         		 ***/
         		smsText = SagesMessage.data + " " + SagesMessage.enc_aes + SagesMessage.DELIM_HeaderToBody + new String(b64SmsTextData);
+        	} else if (!isEncrypted){
+        		/** 
+        		 *  Add The "meta-data header" FOR NOW DON'T ADD HEADER -- RAPIDANDROID HASN'T BEEN ADJUSTED 
+        		 *  TODO: pokuam1 turn this into a method
+        		 ***/
+        		//smsText = SagesMessage.data + " " + SagesMessage.DELIM_HeaderToBody + smsText;
+        		
         	}
-        	dividedBlob = divideTextAddHeader(smsText, MULTIPART_SMS_SIZE, ENCODING_SMS_SIZE, formId);
-        	} catch (Exception e){
-        		e.printStackTrace();
-        		Log.e(t + ".divideTextAddHeader", e.getMessage());
+        	
+        	if (smsText.length() > 160 ) {
+        		dividedBlob = divideTextAddHeader(smsText, MULTIPART_SMS_SIZE, ENCODING_SMS_SIZE, formId);
+        	} else {
+        		dividedBlob.add(smsText);
         	}
-        	Calendar cal = new GregorianCalendar();
-        	int dayOfYear = cal.get(Calendar.DAY_OF_YEAR);
-        	int hr = cal.get(Calendar.HOUR_OF_DAY);
-        	int min = cal.get(Calendar.MINUTE);
-        	int sec = cal.get(Calendar.SECOND);
-        	String txId = dayOfYear + "" + hr + "" + min + "" + sec;
-        	//applyHeaders(dividedBlob, txId);
+        } catch (Exception e){
+        	e.printStackTrace();
+        	Log.e(t + ".divideTextAddHeader", e.getMessage());
         }
+    	
+       	Calendar cal = new GregorianCalendar();
+    	int dayOfYear = cal.get(Calendar.DAY_OF_YEAR);
+    	int hr = cal.get(Calendar.HOUR_OF_DAY);
+    	int min = cal.get(Calendar.MINUTE);
+    	int sec = cal.get(Calendar.SECOND);
+    	String txId = dayOfYear + "" + hr + "" + min + "" + sec;
+    	
         this.dividedBlob = dividedBlob;
 	}
 
@@ -125,17 +139,15 @@ public class SagesOdkMessage extends SagesSmsMessage{
 		}
 	}
 	
-	public void segmentMessage(){
-		if (isMultipart()){
-			
-		}
-	}
-	
-	
-	
 	/**
+	 * Example usage:
+	 * ArrayList<String> dividedBlob = divideTextAddHeader(smsText, MULTIPART_SMS_SIZE, ENCODING_SMS_SIZE, formId);
+	 * 
 	 * @param smsText
-	 * @param i
+	 * @param segSize
+	 * @param allowedInfoSize
+	 * @param formId
+	 * @return
 	 */
 	private ArrayList<String> divideTextAddHeader(String smsText, int segSize, int allowedInfoSize, String formId) {
 		ArrayList<String> dividedText = new ArrayList<String>();
