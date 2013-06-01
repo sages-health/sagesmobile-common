@@ -10,7 +10,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import android.util.Log;
+import edu.jhuapl.sages.mobile.lib.message.MessageBuilderUtil;
 import edu.jhuapl.sages.mobile.lib.message.SagesMessage;
+import edu.jhuapl.sages.mobile.lib.message.SagesMessage.MsgTypeEnum;
 
 public class SagesOdkMessage extends SagesSmsMessage{
 
@@ -97,7 +99,8 @@ public class SagesOdkMessage extends SagesSmsMessage{
 	        		seg_index|segs_tot|tx_id:data enc aes|here goes the message text here it all goes
         		 *  TODO: pokuam1 turn this into a method
         		 ***/
-        		smsText = SagesMessage.data + " " + SagesMessage.enc_aes + SagesMessage.DELIM_HeaderToBody + new String(b64SmsTextData);
+        		smsText = MessageBuilderUtil.genMetaDataHeader(MsgTypeEnum.DATA, null) + new String(b64SmsTextData);
+//        		smsText = SagesMessage.data + " " + SagesMessage.enc_aes + SagesMessage.DELIM_HeaderToBody + new String(b64SmsTextData);
         	} else if (!isEncrypted){
         		/** 
         		 *  Add The "meta-data header" FOR NOW DON'T ADD HEADER -- RAPIDANDROID HASN'T BEEN ADJUSTED 

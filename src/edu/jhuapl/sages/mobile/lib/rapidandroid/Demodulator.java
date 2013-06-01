@@ -11,7 +11,9 @@ import java.util.Map.Entry;
 import android.util.Log;
 
 import edu.jhuapl.sages.mobile.lib.crypto.persisted.SagesKeyException;
+import edu.jhuapl.sages.mobile.lib.message.MessageBuilderUtil;
 import edu.jhuapl.sages.mobile.lib.message.SagesMessage;
+import edu.jhuapl.sages.mobile.lib.message.SagesMessage.MsgTypeEnum;
 import edu.jhuapl.sages.mobile.lib.odk.DataChunker;
 
 
@@ -62,7 +64,8 @@ public class Demodulator {
 		 * 2. b64Decode
 		 * 3. decrypt
 		 */
-		String data_enc_aes_hdr = SagesMessage.data + " " + SagesMessage.enc_aes + SagesMessage.DELIM_HeaderToBody; 
+		String data_enc_aes_hdr = MessageBuilderUtil.genMetaDataHeader(MsgTypeEnum.DATA, null); 
+//		String data_enc_aes_hdr = SagesMessage.data + " " + SagesMessage.enc_aes + SagesMessage.DELIM_HeaderToBody; 
 		if (blob.startsWith(data_enc_aes_hdr)){
 			blob = blob.substring(data_enc_aes_hdr.length());
 			

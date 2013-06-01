@@ -11,7 +11,15 @@ import edu.jhuapl.sages.mobile.lib.message.SagesMessage.MsgTypeEnum;
  */
 public class MessageBuilderUtil {
 
-	public static String genTestHeader(MsgTypeEnum msgType, String params){
+	/**
+	 * Header that provides information on how the sms should be processed. KeyExchange, Status, Data. Includes information
+	 * about encryption algorithm used, compression schemes if any, status codes etc. 
+	 * 
+	 * @param msgType
+	 * @param params
+	 * @return meta data header to prefix an sms message
+	 */
+	public static String genMetaDataHeader(MsgTypeEnum msgType, String params){
 		String testHeader = "";
 		switch (msgType){
 		case KEY_EXCH: 
@@ -22,7 +30,7 @@ public class MessageBuilderUtil {
 		case STATUS:
 			testHeader = SagesMessage.DELIM_HeaderToBody;
 		case DATA:
-			testHeader = SagesMessage.data + " " + SagesMessage.enc_aes + " " + SagesMessage.DELIM_HeaderToBody;
+			testHeader = SagesMessage.data + " " + SagesMessage.enc_aes + SagesMessage.DELIM_HeaderToBody;
 			break;
 		}
 		return testHeader;
