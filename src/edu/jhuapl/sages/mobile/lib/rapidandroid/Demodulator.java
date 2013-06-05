@@ -64,6 +64,8 @@ public class Demodulator {
 		 * 2. b64Decode
 		 * 3. decrypt
 		 */
+		
+		//TODO  need to handle the non encrypted case!!!
 		String data_enc_aes_hdr = MessageBuilderUtil.genMetaDataHeader(MsgTypeEnum.DATA, null); 
 //		String data_enc_aes_hdr = SagesMessage.data + " " + SagesMessage.enc_aes + SagesMessage.DELIM_HeaderToBody; 
 		if (blob.startsWith(data_enc_aes_hdr)){

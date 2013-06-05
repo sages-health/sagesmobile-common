@@ -84,10 +84,10 @@ public class SagesOdkMessage extends SagesSmsMessage{
         	} else {
         		Log.d(t, "GOOD NO special characters beyone US ASCII. SEND BIG FAT MSG.");
         		Log.d(t, "Text length= " + smsText.length());
-        		MULTIPART_SMS_SIZE = 120; //ORIGINALLY HAVE DEPLOYED WITH 120 & 70
-        		ENCODING_SMS_SIZE = 70;
-//        		MULTIPART_SMS_SIZE = 150; // EXPERIMENTAL LETS TRY TO GET CLOSER TO 160 (header ~20 chars)
-//        		ENCODING_SMS_SIZE = 130;
+//        		MULTIPART_SMS_SIZE = 120; //ORIGINALLY HAVE DEPLOYED WITH 120 & 70
+//        		ENCODING_SMS_SIZE = 70;
+        		MULTIPART_SMS_SIZE = 150; // EXPERIMENTAL LETS TRY TO GET CLOSER TO 160 (header ~20 chars)
+        		ENCODING_SMS_SIZE = 130;
         	}
         	
         	if (isEncrypted){
