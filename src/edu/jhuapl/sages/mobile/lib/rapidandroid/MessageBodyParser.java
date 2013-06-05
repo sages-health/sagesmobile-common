@@ -92,7 +92,10 @@ public class MessageBodyParser {
 		String[] msgSplit = msg.split(splitMsg);
 		
 		if (msgSplit.length == 1){
-			return null;
+			String[] demodMsg = Demodulator.demod(msg);
+			MessageBodyParser mbd = new MessageBodyParser();
+			SagesPdu sagesPdu = mbd.new SagesPdu(1, 1, -1, demodMsg[0], sender);
+			return sagesPdu;
 		}
 		String payload = msgSplit[1];
 		String[] pdu = msgSplit[0].split(splitPdu);
