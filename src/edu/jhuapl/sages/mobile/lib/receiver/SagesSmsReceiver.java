@@ -103,12 +103,17 @@ public class SagesSmsReceiver extends BroadcastReceiver {
 			handleKeyExchangeMessage(context, sender, body);
 		} else if (body.contains(SagesMessage.reply)){ 
 			handleReplyMessage(context, null, sender, body);
+		} else {
+			handleUnknownMessage(context, intent, sender, body);
 		}
 	
 	}
 
 	
 	/**
+	 * Upon determing message is of type {@linkplain MsgTypeEnum.DATA}  then sends our broadcast for
+	 * new Intent("edu.jhuapl.sages.mobile.lib.android.provider.Telephony.SMS_RECEIVED")
+	 * 
 	 * @param sender
 	 * @param body
 	 * @throws SagesKeyException 
@@ -117,6 +122,20 @@ public class SagesSmsReceiver extends BroadcastReceiver {
 		if (!body.contains(SagesMessage.data)){ //TODO Handle this case.
 			return;
 		}
+		
+		Intent broadcast = new Intent("edu.jhuapl.sages.mobile.lib.android.provider.Telephony.SMS_RECEIVED");
+		broadcast.putExtras(intent.getExtras());
+		context.sendBroadcast(broadcast);
+	}
+	
+	/**
+	 * Sends our broadcast for new Intent("edu.jhuapl.sages.mobile.lib.android.provider.Telephony.SMS_RECEIVED")
+	 * 
+	 * @param sender
+	 * @param body
+	 * @throws SagesKeyException 
+	 */
+	protected void handleUnknownMessage(Context context, Intent intent, String sender, String body) {
 		
 		Intent broadcast = new Intent("edu.jhuapl.sages.mobile.lib.android.provider.Telephony.SMS_RECEIVED");
 		broadcast.putExtras(intent.getExtras());
