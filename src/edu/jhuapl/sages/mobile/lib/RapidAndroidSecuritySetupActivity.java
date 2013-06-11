@@ -1,5 +1,6 @@
 package edu.jhuapl.sages.mobile.lib;
 
+
 /**
  * Admin view for setting up Security within calling app -- in this case RapidAndroid
  * 
@@ -8,8 +9,13 @@ package edu.jhuapl.sages.mobile.lib;
  */
 public class RapidAndroidSecuritySetupActivity extends SecuritySetupActivity {
 
+	public RapidAndroidSecuritySetupActivity() {
+		super.showEncryptionToggle = false;
+	}
+	
 	@Override
 	protected void setPreferencesFileName(){
 		this.prefsFileName = "edu.jhuapl.sages.mobile.lib.RapidAndroid";
 	}
+	
 }

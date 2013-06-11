@@ -9,10 +9,14 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 
 /**
@@ -29,7 +33,14 @@ public class SecuritySetupActivity extends Activity {
 
 	private Button btnGenAesKey;
 	private EditText txtAesKeyVal;
+    private ToggleButton tglEncryptionOnOff;
+    protected boolean showEncryptionToggle;
     
+	public SecuritySetupActivity() {
+		this.showEncryptionToggle = true;
+	}
+
+
 	/**
      * Called when the activity is first created.
      */
@@ -48,6 +59,7 @@ public class SecuritySetupActivity extends Activity {
 		}
         
         prefs = this.getSharedPreferences(prefsFileName, Context.MODE_PRIVATE);
+        
         
         txtAesKeyVal = (EditText)findViewById(R.id.txt_aeskey);
         txtAesKeyVal.setText(prefs.getString(KEY_AESKEY, "no key set"));
@@ -70,6 +82,28 @@ public class SecuritySetupActivity extends Activity {
 				}
 			}
 		});
+       
+        tglEncryptionOnOff = (ToggleButton)findViewById(R.id.tgl_encryption);
+        
+        // Some views (i.e. RapidAndroid) should not display the toggle button
+        if (showEncryptionToggle){
+        	tglEncryptionOnOff.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+        		
+        		@Override
+        		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        			if (isChecked){
+        				SharedObjects.setEncryptionOn(true);
+        			} else {
+        				SharedObjects.setEncryptionOn(false);
+        			}
+        		}
+        	});
+        } else {
+        	ViewGroup layout = (ViewGroup)tglEncryptionOnOff.getParent();
+        	layout.removeView(tglEncryptionOnOff);
+        }
+        
+        
 
     }
     
