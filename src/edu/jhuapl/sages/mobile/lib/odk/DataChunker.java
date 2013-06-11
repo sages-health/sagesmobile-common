@@ -13,8 +13,6 @@ import java.util.Map;
 
 import javax.crypto.NoSuchPaddingException;
 
-import  org.spongycastle.jce.provider.BouncyCastleProvider;
-
 import org.spongycastle.util.encoders.Base64;
 
 import edu.jhuapl.sages.mobile.lib.SharedObjects;

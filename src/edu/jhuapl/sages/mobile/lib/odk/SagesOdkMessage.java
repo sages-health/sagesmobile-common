@@ -11,7 +11,6 @@ import java.util.regex.Pattern;
 
 import android.util.Log;
 import edu.jhuapl.sages.mobile.lib.message.MessageBuilderUtil;
-import edu.jhuapl.sages.mobile.lib.message.SagesMessage;
 import edu.jhuapl.sages.mobile.lib.message.SagesMessage.MsgTypeEnum;
 
 public class SagesOdkMessage extends SagesSmsMessage{
@@ -217,4 +216,7 @@ public class SagesOdkMessage extends SagesSmsMessage{
 		return dividedBlob;
 	}
 	
+	public void testHook(String smsText){
+		this.processSmsText(smsText);
+	}
 }
