@@ -1,12 +1,6 @@
 package edu.jhuapl.sages.mobile.lib.receiver;
 
 import java.io.File;
-import java.security.NoSuchAlgorithmException;
-import java.util.Calendar;
-
-import javax.crypto.NoSuchPaddingException;
-
-import org.spongycastle.util.encoders.Base64;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -16,20 +10,17 @@ import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.widget.Toast;
 import edu.jhuapl.sages.mobile.lib.SagesConstants;
-//import edu.jhuapl.sages.mobile.lib.app.crypto.ShowDecryptedMessageActivity;
-//import edu.jhuapl.sages.mobile.lib.app.tests.crypto.SagesKeyTest;
-import edu.jhuapl.sages.mobile.lib.crypto.engines.CryptoEngine;
 import edu.jhuapl.sages.mobile.lib.crypto.persisted.KeyStoreI;
-import edu.jhuapl.sages.mobile.lib.crypto.persisted.SagesKey.KeyEnum;
 import edu.jhuapl.sages.mobile.lib.crypto.persisted.SagesKeyException;
 import edu.jhuapl.sages.mobile.lib.crypto.persisted.SagesKeyStore;
 import edu.jhuapl.sages.mobile.lib.crypto.persisted.SagesPrivateKey;
 import edu.jhuapl.sages.mobile.lib.crypto.persisted.SagesPublicKey;
-import edu.jhuapl.sages.mobile.lib.message.DataMessage;
 import edu.jhuapl.sages.mobile.lib.message.KeyExchangeMessage;
 import edu.jhuapl.sages.mobile.lib.message.MessageBuilderUtil;
 import edu.jhuapl.sages.mobile.lib.message.SagesMessage;
 import edu.jhuapl.sages.mobile.lib.message.SagesMessage.MsgTypeEnum;
+//import edu.jhuapl.sages.mobile.lib.app.crypto.ShowDecryptedMessageActivity;
+//import edu.jhuapl.sages.mobile.lib.app.tests.crypto.SagesKeyTest;
 
 /**
  * TODO:
