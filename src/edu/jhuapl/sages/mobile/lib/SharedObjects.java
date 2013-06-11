@@ -7,11 +7,11 @@ import javax.crypto.NoSuchPaddingException;
 import android.util.Log;
 
 import edu.jhuapl.sages.mobile.lib.crypto.engines.CryptoEngine;
-import edu.jhuapl.sages.mobile.lib.crypto.persisted.SagesKeyException;
 
 public class SharedObjects {
 	
 	private static CryptoEngine cryptoEngine;
+	private static boolean isEncryptionOn;
 	
 	public SharedObjects() throws NoSuchAlgorithmException, NoSuchPaddingException{
 		cryptoEngine = new CryptoEngine("PASSWORD12345678".getBytes());
@@ -34,6 +34,18 @@ public class SharedObjects {
 	protected static void updateCryptoEngine(String keyVal) throws NoSuchAlgorithmException, NoSuchPaddingException{
 		cryptoEngine = new CryptoEngine(keyVal.getBytes());
 		Log.i(SharedObjects.class.getName(), "updated CryptoEnginge.");
+	}
+
+	public static boolean isEncryptionOn() {
+		return isEncryptionOn;
+	}
+
+	protected static void setEncryptionOn(boolean isEncryptionOn) {
+		SharedObjects.isEncryptionOn = isEncryptionOn;
+	}
+	
+	public static void test_updateCryptoEngine(String keyVal) throws NoSuchAlgorithmException, NoSuchPaddingException{
+		updateCryptoEngine(keyVal);
 	}
 
 }
