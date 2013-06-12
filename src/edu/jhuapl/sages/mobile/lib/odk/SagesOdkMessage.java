@@ -2,7 +2,6 @@ package edu.jhuapl.sages.mobile.lib.odk;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -184,28 +183,6 @@ public class SagesOdkMessage extends SagesSmsMessage{
 		}
 //		dividedText = Arrays.asList(s);
 		return dividedText;
-	}
-
-	
-	public static String generateTxID() {
-		Calendar c = Calendar.getInstance();
-		Date d = c.getTime();
-		int year = c.get(Calendar.DAY_OF_YEAR);
-		int doy = c.get(Calendar.DAY_OF_YEAR);
-		int hr = c.get(Calendar.HOUR_OF_DAY);
-		int min = c.get(Calendar.MINUTE);
-		int ms = c.get(Calendar.MILLISECOND);
-		return "" + year + doy + hr + min + ms;
-	}
-
-	public static String generateTxID_Calendar() {
-		Calendar cal = new GregorianCalendar();
-		int dayOfYear = cal.get(Calendar.DAY_OF_YEAR);
-		int hr = cal.get(Calendar.HOUR_OF_DAY);
-		int min = cal.get(Calendar.MINUTE);
-		int sec = cal.get(Calendar.SECOND);
-		String txId = dayOfYear + "" + hr + "" + min + "" + sec;
-		return txId;
 	}
 
 	/**

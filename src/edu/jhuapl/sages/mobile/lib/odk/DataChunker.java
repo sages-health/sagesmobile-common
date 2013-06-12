@@ -97,7 +97,7 @@ public class DataChunker {
 		int beginIndex = 0;
 		int endIndex = beginIndex + infoLength;
 		int i = 0;
-		// String txId = getTxID(); //TODO
+
 		String txId = generateTxID_Calendar();
 
 		String trailText = "";
@@ -273,7 +273,8 @@ public class DataChunker {
 	}
 	
 	/**
-	 * ENCRYPTS WITH HARDCODED 128-bit AES symmetric key in {@link SharedObjects}
+	 * ENCRYPTS WITH THE SET 128-bit AES symmetric key in {@link SharedObjects}
+	 * 
 	 * 
 	 * @param smsText
 	 * @return encrypted data as byte array
@@ -300,7 +301,7 @@ public class DataChunker {
 	}
 	
 	/**
-	 * DECRYPTS WITH HARDCODED 128-bit AES symmetric key in {@link SharedObjects}
+	 * DECRYPTS WITH THE SET 128-bit AES symmetric key in {@link SharedObjects}
 	 * @param cipher
 	 * @return decrypted data byte array
 	 * @throws SagesKeyException 
@@ -344,70 +345,6 @@ public class DataChunker {
 		return Base64.decode(b64encodedCipher);
 	}
 
-	/**
-	 * OLD VERSION DO NOT USE
-	 * @param data
-	 * @param segSize
-	 * @param allowedInfoSize
-	 * @return
-	 */
-	public Map<String, String> chunkDataWithHeaderGo1(String data, int segSize, int allowedInfoSize /* , String formId */) {
-		Map<String, String> payload = new HashMap<String, String>();
-		
-		
-		String smsText = data;
-		int numSegs = (int) Math.ceil(smsText.length() / (double) allowedInfoSize);
-		int expectedChunks = numSegs;
-		int chunkLength = segSize;
-		int infoLength = allowedInfoSize; //ex. 130
-		int start = 0;
-		int end = segSize -1;
-		
-		
-		System.out.println("Exptected Chunks: " + expectedChunks);
-		System.out.println(data);
-		String[] chunks = new String[expectedChunks];
-		int hdrLength = chunkLength - infoLength;
-		int beginIndex = 0;
-		int endIndex = beginIndex + infoLength;
-		int i = 0;
-		// String txId = getTxID(); //TODO
-		String txId = generateTxID_Calendar();
-		this.txId = txId;
-		
-		String trailText = "";
-		int trailIndex = -1;
-		
-
-		//String header = i + "," + chunks.length + "," + txId + ":" + formId +
-		// "#" ;
-		String header = "HEADER";
-		String SYMBOL = "|";
-		while (endIndex <= data.length()) {
-			header = (i + 1) + SYMBOL + chunks.length + SYMBOL + txId + ":";
-			System.out.println("header[" + header.length() + "], data[" + data.substring(beginIndex, endIndex).length() + "]");
-			chunks[i] = data.substring(beginIndex, endIndex);
-			payload.put(header, chunks[i]);
-			trailIndex = endIndex;
-			i++;
-			beginIndex += infoLength;
-			endIndex += infoLength;
-		}
-		if (trailIndex > -1 && trailIndex < data.length()) {
-			header = (i + 1) + SYMBOL + chunks.length + SYMBOL + txId + ":";
-			chunks[i] = data.substring(trailIndex);
-			payload.put(header, chunks[i]);
-			System.out.println("header[" + header.length() + "], data[" + data.substring(beginIndex).length() + "]");
-		}
-		i = 1;
-		for (String chunk : chunks) {
-			System.out.println("CHUNK[" + chunk.length() + "] " + i + ": " + chunk);
-			i++;
-		}
-		
-		return payload;
-	}
-
 	public static void main(String arcv[]) {
 		DataChunker dc = new DataChunker();
 		String data = "";
@@ -425,26 +362,6 @@ public class DataChunker {
 				+ data.length() + "\n\n");
 
 		dc.chunkData(data);
-	}
-
-	/**
-	 * Generates a unique transaction id derived from following Calendar values:
-	 * DAY_OF_YEAR(1-365), HOUR_OF_DAY(0-24), MINUTE(0-59), SECOND(0-59)
-	 * 
-	 * The min length of transaction id = 4
-	 * The max possible length of transaction id = 9 
-	 * 
-	 * @return transaction id (can range in length from 4 to 9 characters)
-	 */
-	public static String generateTxID() {
-		Calendar c = Calendar.getInstance();
-		Date d = c.getTime();
-		int year = c.get(Calendar.DAY_OF_YEAR);
-		int doy = c.get(Calendar.DAY_OF_YEAR);
-		int hr = c.get(Calendar.HOUR_OF_DAY);
-		int min = c.get(Calendar.MINUTE);
-		int ms = c.get(Calendar.MILLISECOND);
-		return "" + year + doy + hr + min + ms;
 	}
 
 	/**
