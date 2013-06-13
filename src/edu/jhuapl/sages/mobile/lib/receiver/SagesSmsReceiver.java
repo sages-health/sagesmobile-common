@@ -82,9 +82,10 @@ public class SagesSmsReceiver extends BroadcastReceiver {
 		
 		/**
 		 * 1. determine message type -> msg type
-		 * 	  1) KEY_EXCHANGE (AES, RSA)
-		 *    2) DATA
+		 *    1) DATA (encrypted and/or multi-part)
+		 * 	  2) KEY_EXCHANGE (AES, RSA)
 		 *    3) STATUS
+		 *    4) OTHER (encrypted and/or single msg)
 		 * 2. dispatch on msg type
 		 * 
 		 */
