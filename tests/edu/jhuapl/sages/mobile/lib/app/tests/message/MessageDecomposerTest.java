@@ -42,7 +42,7 @@ public class MessageDecomposerTest extends CryptoEngineTest {
 
 
 	private String buildKeyExchangeMessage() {
-		String msgHeader = MessageBuilderUtil.genTestHeader(MsgTypeEnum.KEY_EXCH, "init aes");
+		String msgHeader = MessageBuilderUtil.genMetaDataHeader(MsgTypeEnum.KEY_EXCH, "init aes");
 		String msgBody = SagesMessage.my_key + new String(this.getCrypto().getSkeySpec().getEncoded());
 		String text = msgHeader + msgBody;
 		return text;
@@ -82,7 +82,7 @@ public class MessageDecomposerTest extends CryptoEngineTest {
 
 
 	private String buildEncAesDataMessage() {
-		String msgHeader = MessageBuilderUtil.genTestHeader(MsgTypeEnum.DATA, "enc aes");
+		String msgHeader = MessageBuilderUtil.genMetaDataHeader(MsgTypeEnum.DATA, "enc aes");
 		String msgBody = CryptoEngineTest.DUMMY_MESSAGE_CLEAR;
 		String text =  msgHeader + msgBody;
 		return text;

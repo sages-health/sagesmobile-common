@@ -201,7 +201,7 @@ public class MainActivity extends Activity {
 	
 	private void refreshKeyExchangeMsg() {
 		msgText = (TextView)findViewById(R.id.txt_keyexchange_msg);
-		String msgHeader = MessageBuilderUtil.genTestHeader(MsgTypeEnum.KEY_EXCH, "init");
+		String msgHeader = MessageBuilderUtil.genMetaDataHeader(MsgTypeEnum.KEY_EXCH, "init");
 		String msgBody = SagesMessage.my_key + SagesKeyTest.testData + " (" + NUMBER_THIS_DEVICE +") - " + 
 				Calendar.getInstance().get(Calendar.HOUR) + Calendar.getInstance().get(Calendar.MINUTE) + Calendar.getInstance().get(Calendar.SECOND);
 		

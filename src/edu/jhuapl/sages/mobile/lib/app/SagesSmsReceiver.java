@@ -147,7 +147,7 @@ public class SagesSmsReceiver extends BroadcastReceiver {
 						}
 						//2)
 						
-						String msgHeader = MessageBuilderUtil.genTestHeader(MsgTypeEnum.KEY_EXCH, "reply");
+						String msgHeader = MessageBuilderUtil.genMetaDataHeader(MsgTypeEnum.KEY_EXCH, "reply");
 						String msgBody = SagesMessage.my_key + SagesKeyTest.testData + "- for key:" + MainActivity.NUMBER_THIS_DEVICE + " - " + Calendar.MILLISECOND;
 						try {
 							MainActivity.saveOwnKeyPriorToSMS(context, "+" + MainActivity.NUMBER_THIS_DEVICE, (msgHeader + msgBody));

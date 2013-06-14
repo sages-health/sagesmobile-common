@@ -105,7 +105,7 @@ public class KeyGenerateActivity extends Activity {
 				public void onClick(View v) {
 					SmsManager smsMgr = SmsManager.getDefault();
 					
-					String msgHeader = MessageBuilderUtil.genTestHeader(MsgTypeEnum.KEY_EXCH, "init aes");
+					String msgHeader = MessageBuilderUtil.genMetaDataHeader(MsgTypeEnum.KEY_EXCH, "init aes");
 					String msgBody = SagesMessage.my_key + new String(crypto.getSkeySpec().getEncoded());
 					String text = msgHeader + msgBody;
 					smsMgr.sendTextMessage("2404759981", null, text, null, null);
@@ -121,7 +121,7 @@ public class KeyGenerateActivity extends Activity {
 				public void onClick(View v) {
 					try {
 					SmsManager smsMgr = SmsManager.getDefault();
-					String msgHeader = MessageBuilderUtil.genTestHeader(MsgTypeEnum.DATA, "enc aes");
+					String msgHeader = MessageBuilderUtil.genMetaDataHeader(MsgTypeEnum.DATA, "enc aes");
 					String msgBody;
 					byte[] cipheredBody = crypto.encrypt(KeyGenerateActivity.DUMMY_MESSAGE_CLEAR.getBytes());
 					
