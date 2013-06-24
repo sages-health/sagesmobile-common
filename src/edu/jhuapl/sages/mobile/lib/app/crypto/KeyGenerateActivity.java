@@ -5,13 +5,12 @@ import java.security.NoSuchAlgorithmException;
 
 import javax.crypto.NoSuchPaddingException;
 
-import org.spongycastle.util.encoders.Base64;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Environment;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
+import android.util.Base64;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -125,7 +124,7 @@ public class KeyGenerateActivity extends Activity {
 					String msgBody;
 					byte[] cipheredBody = crypto.encrypt(KeyGenerateActivity.DUMMY_MESSAGE_CLEAR.getBytes());
 					
-					byte[] cipheredBodyB64 = Base64.encode(cipheredBody);
+					byte[] cipheredBodyB64 = Base64.encode(cipheredBody, Base64.DEFAULT);
 						msgBody = new String(cipheredBodyB64);
 						String text = msgHeader + msgBody;
 						Toast.makeText(KeyGenerateActivity.this, "SMS length: " + text.length(), Toast.LENGTH_SHORT).show();
@@ -193,11 +192,11 @@ public class KeyGenerateActivity extends Activity {
 			msg.setText(DUMMY_MESSAGE_CLEAR);
 			
 			byte[] encryptedBytes = crypto.encrypt(DUMMY_MESSAGE_CLEAR.getBytes());
-			byte[] b64Cipher = Base64.encode(encryptedBytes);
+			byte[] b64Cipher = Base64.encode(encryptedBytes, Base64.DEFAULT);
 			msgEncrypted = (TextView)findViewById(R.id.txt_msg_encrypted);
 			msgEncrypted.setText("Encrypted: " + new String(encryptedBytes) + " Encoded b64: " + new String(b64Cipher));
 			
-			byte[] b64DecodedCipher = Base64.decode(new String(b64Cipher));
+			byte[] b64DecodedCipher = Base64.decode(b64Cipher, Base64.DEFAULT);
 			byte[] decryptedBytes = crypto.decrypt(b64DecodedCipher);
 //			byte[] decryptedBytes = crypto.decrypt(encryptedBytes);
 			msgDecrypted = (TextView)findViewById(R.id.txt_msg_decrypted);

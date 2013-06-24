@@ -5,9 +5,8 @@ import java.util.Arrays;
 
 import javax.crypto.NoSuchPaddingException;
 
-import org.spongycastle.util.encoders.Base64;
-
 import android.test.AndroidTestCase;
+import android.util.Base64;
 import edu.jhuapl.sages.mobile.lib.crypto.engines.CryptoEngine;
 
 /**
@@ -58,14 +57,14 @@ public class CryptoEngineTest extends AndroidTestCase {
 		
 		try {
 			encryptedBytes = getCrypto().encrypt(DUMMY_MESSAGE_CLEAR.getBytes());
-			b64EncodedCipher  = Base64.encode(encryptedBytes);
+			b64EncodedCipher  = Base64.encode(encryptedBytes, Base64.DEFAULT);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
 		}
 		
 		try {
-			b64DecodedCipher = Base64.decode(b64EncodedCipher);
+			b64DecodedCipher = Base64.decode(b64EncodedCipher, Base64.DEFAULT);
 			assertEquals(true, Arrays.equals(encryptedBytes, b64DecodedCipher));
 			decryptedBytes = getCrypto().decrypt(encryptedBytes);
 			assertEquals(true, Arrays.equals(DUMMY_MESSAGE_CLEAR.getBytes(), decryptedBytes));

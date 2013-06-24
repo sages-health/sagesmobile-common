@@ -6,14 +6,13 @@ import java.util.Calendar;
 
 import javax.crypto.NoSuchPaddingException;
 
-import org.spongycastle.util.encoders.Base64;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
+import android.util.Base64;
 import android.widget.Toast;
 import edu.jhuapl.sages.mobile.lib.app.crypto.ShowDecryptedMessageActivity;
 import edu.jhuapl.sages.mobile.lib.app.tests.crypto.SagesKeyTest;
@@ -84,7 +83,7 @@ public class SagesSmsReceiver extends BroadcastReceiver {
 							String b64Encoded = dataMsg.getBody().getBody();
 
 							byte[] b64EncodedCipher = (dataMsg.getBody().getBody().getBytes());
-							byte[] b64DecodedCipher = Base64.decode(b64EncodedCipher);
+							byte[] b64DecodedCipher = Base64.decode(b64EncodedCipher, Base64.DEFAULT);
 							byte[] decryptedMsg = crytpoengine.decrypt(b64DecodedCipher);
 							String raw = new String(decryptedMsg);
 							
