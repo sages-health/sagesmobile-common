@@ -4,17 +4,14 @@
 package edu.jhuapl.sages.mobile.lib.odk;
 
 import java.security.NoSuchAlgorithmException;
-import java.security.Security;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.crypto.NoSuchPaddingException;
 
-import org.spongycastle.util.encoders.Base64;
-
+import android.util.Base64;
 import edu.jhuapl.sages.mobile.lib.SharedObjects;
 import edu.jhuapl.sages.mobile.lib.crypto.engines.CryptoEngine;
 import edu.jhuapl.sages.mobile.lib.crypto.persisted.SagesKeyException;
@@ -27,12 +24,8 @@ import edu.jhuapl.sages.mobile.lib.crypto.persisted.SagesKeyException;
 public class DataChunker {
 
 	static {
-		// https://github.com/rtyley/spongycastle/issues/10
-		// Adds a new provider, at a specified position
-//	    Security.insertProviderAt(new org.spongycastle.jce.provider.BouncyCastleProvider(), 1);
-	    
-		Security.removeProvider(new org.spongycastle.jce.provider.BouncyCastleProvider().getName());
-		Security.addProvider(new org.spongycastle.jce.provider.BouncyCastleProvider());
+		//Security.removeProvider(new org.spongycastle.jce.provider.BouncyCastleProvider().getName());
+		//Security.addProvider(new org.spongycastle.jce.provider.BouncyCastleProvider());
 	}
 	private String txId;
 
@@ -332,7 +325,7 @@ public class DataChunker {
 	 * @return
 	 */
 	public static byte[] base64EncodeCipherGo(byte[] cipher){
-		return Base64.encode(cipher);
+		return Base64.encode(cipher, Base64.DEFAULT);
 	}
 	
 	
@@ -342,7 +335,7 @@ public class DataChunker {
 	 * @return 
 	 */
 	public static byte[] base64DecodeCipherGo(byte[] b64encodedCipher){
-		return Base64.decode(b64encodedCipher);
+		return Base64.decode(b64encodedCipher, Base64.DEFAULT);
 	}
 
 	public static void main(String arcv[]) {
