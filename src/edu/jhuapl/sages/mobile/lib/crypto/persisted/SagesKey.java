@@ -1,15 +1,15 @@
 package edu.jhuapl.sages.mobile.lib.crypto.persisted;
 
+import android.content.Context;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
-import android.content.Context;
-
 /**
  * 
- * @author pokuam1
+ * @author sages
  * @date 05/02/13
  */
 public class SagesKey {
