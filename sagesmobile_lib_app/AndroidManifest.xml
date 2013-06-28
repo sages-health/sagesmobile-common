@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="edu.jhuapl.sages.mobile.lib.app"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="10"
+        android:targetSdkVersion="17" />
+
+    <instrumentation	
+    android:name="android.test.InstrumentationTestRunner"
+    android:targetPackage="edu.jhuapl.sages.mobile.lib.app" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.SEND_SMS" /> 
+	<uses-permission android:name="android.permission.RECEIVE_SMS"/>    
+	<uses-permission android:name="android.permission.READ_PHONE_STATE" />   
+    
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <uses-library android:name="android.test.runner" />
+        
+        <activity 
+            android:name="edu.jhuapl.sages.mobile.lib.app.OdkSecuritySetupActivity"
+            android:label="ODK Security Setup">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        
+        <activity 
+            android:name="edu.jhuapl.sages.mobile.lib.app.SecuritySetupActivity"
+            android:label="Security Setup">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        
+        <activity
+            android:name="edu.jhuapl.sages.mobile.lib.app.crypto.ecc.CryptoMainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <activity
+            android:name="edu.jhuapl.sages.mobile.lib.app.MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="edu.jhuapl.sages.mobile.lib.app.crypto.KeyGenerateActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        
+        <activity
+            android:name="edu.jhuapl.sages.mobile.lib.app.crypto.ShowDecryptedMessageActivity"
+            android:label="@string/app_name" >
+        </activity>
+        
+
+        
+        
+        <receiver android:name="edu.jhuapl.sages.mobile.lib.app.SagesSmsReceiver">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+    </application>
+
+    
+    
+    
+</manifest>

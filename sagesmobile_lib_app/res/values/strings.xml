@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">SagesMobileLibraryApp</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="this_deviceNumber">Device\'s Phone Number:</string>
+    <string name="lookup_contact">Lookup Contact:</string>
+	<string name="no_keys_for_contact">No Keys For Contact</string>
+	<string name="launch_key_exchange_msg">Initiate Key Exchange</string>
+	<string name="generate_keys">Generate Keys</string>
+	<string name="send_aes_key">Send AES Key</string>
+	<string name="ecnrypt_send_msg">Encrypt and Send Message</string>
+</resources>
