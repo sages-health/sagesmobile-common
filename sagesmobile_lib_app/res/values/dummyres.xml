@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="contacts_array">
+	    <item>+12404759981</item>
+	    <item>+12404759206</item>
+	    <item>5554</item>
+	    <item>5556</item>
+	</string-array>
+</resources>

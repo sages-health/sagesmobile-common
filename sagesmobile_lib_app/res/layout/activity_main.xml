@@ -1,0 +1,40 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".CryptoMainActivity" >
+    
+    <TextView
+        android:id="@+id/txt_deviceNum"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/this_deviceNumber" />
+    <TextView
+        android:id="@+id/txt_lookupContact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/lookup_contact" />
+	<ListView 
+	    android:id="@+id/contacts_list"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    ></ListView>
+	<TextView
+	    android:id="@+id/publickey_contact"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    ></TextView>
+    <Button 
+        android:id="@+id/btn_KeyExchange"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/launch_key_exchange_msg"
+        />
+	<TextView 
+	    android:id="@+id/txt_keyexchange_msg"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    />               
+        
+</LinearLayout>
