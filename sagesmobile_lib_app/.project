@@ -30,16 +30,4 @@
 		<nature>com.android.ide.eclipse.adt.AndroidNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>lib-gen</name>
-			<type>2</type>
-			<locationURI>WORKSPACE_LOC/SagesMobileLibrary/gen</locationURI>
-		</link>
-		<link>
-			<name>lib-src</name>
-			<type>2</type>
-			<locationURI>WORKSPACE_LOC/SagesMobileLibrary/src</locationURI>
-		</link>
-	</linkedResources>
 </projectDescription>
