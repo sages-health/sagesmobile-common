@@ -51,7 +51,6 @@ public class SagesKey {
 	
 	public SagesKey(Context context, String locationId, String[] params, byte[] data){
 		this.context = context;
-		this.tag = tag;
 		this.locationId = locationId;
 		this.params = params;
 		this.data = data;

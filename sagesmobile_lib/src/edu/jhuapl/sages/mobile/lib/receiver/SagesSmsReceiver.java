@@ -72,8 +72,8 @@ public class SagesSmsReceiver extends BroadcastReceiver {
 		Object[] pdus = (Object[])extras.get("pdus");
 		for (int i = 0; i < pdus.length; i++){
 			SmsMessage sms = SmsMessage.createFromPdu((byte[])pdus[i]);
-			String sender = sms.getOriginatingAddress();
-			String body = sms.getMessageBody();
+//			String sender = sms.getOriginatingAddress();
+//			String body = sms.getMessageBody();
 			
 			/**
 			 * if sms body contains the text for "key_exch", then process as key exchange message.
@@ -82,7 +82,7 @@ public class SagesSmsReceiver extends BroadcastReceiver {
 			 *  
 			 * if sms body contains the text for "data", and also "enc aes" then process as an encrypted msg
 			 */
-			boolean keyExchangeSuccess = false;
+//			boolean keyExchangeSuccess = false;
 			/**
 			 * 1. determine message type -> msg type
 			 * 	  1) KEY_EXCHANGE (AES, RSA)

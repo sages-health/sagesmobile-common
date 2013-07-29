@@ -54,6 +54,7 @@ public class MessageBuilderUtil {
 			break;
 		case STATUS:
 			testHeader = SagesMessage.DELIM_HeaderToBody;
+			break;
 		case DATA:
 			testHeader = SagesMessage.data + " " + SagesMessage.enc_aes + SagesMessage.DELIM_HeaderToBody;
 			break;

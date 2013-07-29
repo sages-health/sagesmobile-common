@@ -101,7 +101,7 @@ public class DataChunker {
 	}
 
 	public static String[] chunkData(String data) {
-		int chunkLength = 160;
+//		int chunkLength = 160;
 		int infoLength = 130;
 		int expectedChunks = (int) Math.ceil((double) data.length()
 				/ (double) infoLength);
@@ -109,14 +109,14 @@ public class DataChunker {
 		System.out.println("Exptected Chunks: " + expectedChunks);
 		System.out.println(data);
 		String[] chunks = new String[expectedChunks];
-		int hdrLength = chunkLength - infoLength;
+//		int hdrLength = chunkLength - infoLength;
 		int beginIndex = 0;
 		int endIndex = beginIndex + infoLength;
 		int i = 0;
 
 		String txId = generateTxID_Calendar();
 
-		String trailText = "";
+//		String trailText = "";
 		int trailIndex = -1;
 		String header = i + "," + chunks.length + "," + txId + ":" + "formid#";
 		while (endIndex <= data.length()) {
@@ -147,7 +147,7 @@ public class DataChunker {
 																	 * formId
 																	 */) {
 		Map<String, String> payload = new HashMap<String, String>();
-		int chunkLength = 160;
+//		int chunkLength = 160;
 		int infoLength = 130;
 		int expectedChunks = (int) Math.ceil((double) data.length()
 				/ (double) infoLength);
@@ -155,13 +155,13 @@ public class DataChunker {
 		System.out.println("Exptected Chunks: " + expectedChunks);
 		System.out.println(data);
 		String[] chunks = new String[expectedChunks];
-		int hdrLength = chunkLength - infoLength;
+//		int hdrLength = chunkLength - infoLength;
 		int beginIndex = 0;
 		int endIndex = beginIndex + infoLength;
 		int i = 0;
 		// String txId = getTxID(); //TODO
 		String txId = generateTxID_Calendar();
-		String trailText = "";
+//		String trailText = "";
 		int trailIndex = -1;
 		// String header = i + "," + chunks.length + "," + txId + ":" + formId +
 		// "#" ;
@@ -228,22 +228,21 @@ public class DataChunker {
 //		int numSegs = (int) Math.round(smsText.length() / (double) allowedInfoSize);
 		int numSegs = (int) Math.ceil(smsText.length() / (double) allowedInfoSize);
 		int expectedChunks = numSegs;
-		int chunkLength = segSize;
+//		int chunkLength = segSize;
 		int infoLength = allowedInfoSize; //ex. 130
-		int start = 0;
-		int end = segSize -1;
+//		int start = 0;
+//		int end = segSize -1;
 		
 		
 		System.out.println("Exptected Chunks: " + expectedChunks);
 		System.out.println(data);
 		String[] chunks = new String[expectedChunks];
-		int hdrLength = chunkLength - infoLength;
+//		int hdrLength = chunkLength - infoLength;
 		int beginIndex = 0;
 		int endIndex = beginIndex + infoLength;
 		int i = 0;
 
-		String txId = generateTxID_Calendar();
-		this.txId = txId;
+		this.txId = generateTxID_Calendar();
 
 		int trailIndex = -1;
 		
@@ -362,7 +361,6 @@ public class DataChunker {
 	}
 
 	public static void main(String arcv[]) {
-		DataChunker dc = new DataChunker();
 		String data = "";
 		int ctr = 0;
 		int maxdatalength = 400;
@@ -377,7 +375,7 @@ public class DataChunker {
 		System.out.println("TOTAL RECORDS: " + ctr + "\n" + "DATA LENGTH: "
 				+ data.length() + "\n\n");
 
-		dc.chunkData(data);
+		DataChunker.chunkData(data);
 	}
 
 	/**

@@ -54,7 +54,7 @@ import javax.crypto.NoSuchPaddingException;
  */
 public class SecuritySetupActivity extends Activity {
     private SharedPreferences prefs;
-    protected static String prefsFileName = "edu.jhuapl.sages.mobile.lib.app";
+    protected String prefsFileName = "edu.jhuapl.sages.mobile.lib.app";
     private static final String KEY_AESKEY = "KEY_AESKEY";
     private static final String no_key_set = "no key set";
     private static final String ENCRYPTION_ON = "ENCRYPTION_ON";
