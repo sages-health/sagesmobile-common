@@ -121,7 +121,7 @@ public class SagesKeyStore implements KeyStoreI {
 			}
 	}
 	
-	protected File getDirForKeys(String agentId) throws SagesKeyException{
+	protected File getDirForKeys(String agentId) throws SagesKeyException {
 		return new File(keyStoreFile.getAbsolutePath() + "/keys_" + agentId);
 	}
 

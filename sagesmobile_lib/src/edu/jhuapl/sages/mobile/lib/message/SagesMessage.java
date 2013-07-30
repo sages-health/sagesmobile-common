@@ -142,9 +142,9 @@ public class SagesMessage implements SagesMessageI {
 		int hdrindx = rawMsg.indexOf(DELIM_HeaderToBody);
 		this.header.setHeader(rawMsg.substring(0, hdrindx));
 		if (this.header.getHeader().contains(SagesMessage.key_exch)){
-			this.msgType = msgType.KEY_EXCH;
+			this.msgType = MsgTypeEnum.KEY_EXCH;
 		} else if (this.header.getHeader().contains(SagesMessage.data)){
-			this.msgType = msgType.DATA;
+			this.msgType = MsgTypeEnum.DATA;
 		}
 		return this.header;
 	}

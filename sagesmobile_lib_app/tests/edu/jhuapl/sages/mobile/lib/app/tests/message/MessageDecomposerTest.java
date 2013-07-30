@@ -51,11 +51,12 @@ public class MessageDecomposerTest extends CryptoEngineTest {
 		// TODO Auto-generated constructor stub
 	}
 
-	private MessageBuilderUtil msgUtil;
+//	private MessageBuilderUtil msgUtil;
 	private String body = "";
 	
+	@Override
 	public void setUp(){
-		msgUtil  = new MessageBuilderUtil();
+//		msgUtil  = new MessageBuilderUtil();
 		
 	}
 	

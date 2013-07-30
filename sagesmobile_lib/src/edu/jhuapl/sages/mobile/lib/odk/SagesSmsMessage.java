@@ -27,7 +27,7 @@ package edu.jhuapl.sages.mobile.lib.odk;
 
 public abstract class SagesSmsMessage {
 
-	private String smsText;
+//	private String smsText;
 	
 	public SagesSmsMessage(String msgText){
 		

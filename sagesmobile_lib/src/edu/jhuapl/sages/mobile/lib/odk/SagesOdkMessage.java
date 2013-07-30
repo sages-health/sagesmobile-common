@@ -25,18 +25,15 @@
 ********************************************************************************/
 package edu.jhuapl.sages.mobile.lib.odk;
 
-import edu.jhuapl.sages.mobile.lib.message.MessageBuilderUtil;
-import edu.jhuapl.sages.mobile.lib.message.SagesMessage.MsgTypeEnum;
-
-import android.util.Log;
-
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import android.util.Log;
+import edu.jhuapl.sages.mobile.lib.message.MessageBuilderUtil;
+import edu.jhuapl.sages.mobile.lib.message.SagesMessage.MsgTypeEnum;
 
 public class SagesOdkMessage extends SagesSmsMessage{
 
@@ -52,9 +49,9 @@ public class SagesOdkMessage extends SagesSmsMessage{
     
 	private String smsText; 
 	public static int MAX_SIZE = 160;
-	private int protocol;
-	private int size;
-	private SagesOdkHeader sagesrefOdk_header;
+//	private int protocol;
+//	private int size;
+//	private SagesOdkHeader sagesrefOdk_header;
 	private ArrayList<String> dividedBlob;
 	
 	private boolean isEncrypted;
@@ -63,51 +60,51 @@ public class SagesOdkMessage extends SagesSmsMessage{
 		super(smsText, formId, txIdCur);
 		this.smsText = smsText;
 		this.formId = formId;
-		this.txIdCur = this.txIdCur;
+		this.txIdCur = txIdCur;
 	}
 	
 	public SagesOdkMessage(String smsText){
 		super(smsText);
 		this.smsText = smsText;
-		this.size = smsText.length();
+//		this.size = smsText.length();
 	}
 	
 	/**
 	 * Configures the message so text processing happens appropriately
-	 * @param isEncrypted
+	 * @param encrypted
 	 */
-	public void configure(boolean isEncrypted){
-		this.isEncrypted = isEncrypted;
+	public void configure(boolean encrypted){
+		this.isEncrypted = encrypted;
 		processSmsText(this.smsText);
 	}
 	
-	private void processSmsText(String smsText) {
-		ArrayList<String> dividedBlob = new ArrayList<String>();
+	private void processSmsText(String smsTextToProcess) {
+		ArrayList<String> newDividedBlob = new ArrayList<String>();
 		
 		/**
 		 * No need to do this portion if code is being encrypted and base64 encoded
 		 */
 		Pattern pattern = Pattern.compile("([\\P{InBasic Latin}]+)");
-		Matcher matcher = pattern.matcher(smsText);
+		Matcher matcher = pattern.matcher(smsTextToProcess);
 		boolean containsUnicode = matcher.find();
 		System.out.println("did it match? " + containsUnicode);
 
         
         if ("multisms".equals(formId)){
-        		smsText.replaceFirst(formId, "");
+        		smsTextToProcess.replaceFirst(formId, "");
         } else {
         	// prepare for header: segNum,totSegs,txID:#formID  //TODO - THIS IS DOING ANYTHING--RA STILL WORKS THOUGH FOR SIMPLE USE CASE
-        	smsText.replaceFirst(formId, "#" + formId);
+        	smsTextToProcess.replaceFirst(formId, "#" + formId);
         }
        	try {
         	if (containsUnicode){
         		Log.d(t, "Text has special characters beyone US ASCII. NEED TO SHRINK MSG.");
-        		Log.d(t, "Text length= " + smsText.length());
+        		Log.d(t, "Text length= " + smsTextToProcess.length());
         		MULTIPART_SMS_SIZE = 70;
         		ENCODING_SMS_SIZE = 50;
         	} else {
         		Log.d(t, "GOOD NO special characters beyone US ASCII. SEND BIG FAT MSG.");
-        		Log.d(t, "Text length= " + smsText.length());
+        		Log.d(t, "Text length= " + smsTextToProcess.length());
 //        		MULTIPART_SMS_SIZE = 120; //ORIGINALLY HAVE DEPLOYED WITH 120 & 70
 //        		ENCODING_SMS_SIZE = 70;
         		MULTIPART_SMS_SIZE = 150; // EXPERIMENTAL LETS TRY TO GET CLOSER TO 160 (header ~20 chars)
@@ -115,7 +112,7 @@ public class SagesOdkMessage extends SagesSmsMessage{
         	}
         	
         	if (isEncrypted){
-        		byte[] smsTextData = DataChunker.encryptDataGo(smsText);
+        		byte[] smsTextData = DataChunker.encryptDataGo(smsTextToProcess);
         		byte[] b64SmsTextData = DataChunker.base64EncodeCipherGo(smsTextData);
         		
         		/** 
@@ -123,7 +120,7 @@ public class SagesOdkMessage extends SagesSmsMessage{
 	        		seg_index|segs_tot|tx_id:data enc aes|here goes the message text here it all goes
         		 *  TODO: pokuam1 turn this into a method
         		 ***/
-        		smsText = MessageBuilderUtil.genMetaDataHeader(MsgTypeEnum.DATA, null) + new String(b64SmsTextData);
+        		smsTextToProcess = MessageBuilderUtil.genMetaDataHeader(MsgTypeEnum.DATA, null) + new String(b64SmsTextData);
 //        		smsText = SagesMessage.data + " " + SagesMessage.enc_aes + SagesMessage.DELIM_HeaderToBody + new String(b64SmsTextData);
         	} else if (!isEncrypted){
         		/** 
@@ -134,24 +131,24 @@ public class SagesOdkMessage extends SagesSmsMessage{
         		
         	}
         	
-        	if (smsText.length() > 160 ) {
-        		dividedBlob = divideTextAddHeader(smsText, MULTIPART_SMS_SIZE, ENCODING_SMS_SIZE, formId);
+        	if (smsTextToProcess.length() > 160 ) {
+        		newDividedBlob = divideTextAddHeader(smsTextToProcess, MULTIPART_SMS_SIZE, ENCODING_SMS_SIZE, formId);
         	} else {
-        		dividedBlob.add(smsText);
+        		newDividedBlob.add(smsTextToProcess);
         	}
         } catch (Exception e){
         	e.printStackTrace();
         	Log.e(t + ".divideTextAddHeader", e.getMessage());
         }
     	
-       	Calendar cal = new GregorianCalendar();
-    	int dayOfYear = cal.get(Calendar.DAY_OF_YEAR);
-    	int hr = cal.get(Calendar.HOUR_OF_DAY);
-    	int min = cal.get(Calendar.MINUTE);
-    	int sec = cal.get(Calendar.SECOND);
-    	String txId = dayOfYear + "" + hr + "" + min + "" + sec;
+//       	Calendar cal = new GregorianCalendar();
+//    	int dayOfYear = cal.get(Calendar.DAY_OF_YEAR);
+//    	int hr = cal.get(Calendar.HOUR_OF_DAY);
+//    	int min = cal.get(Calendar.MINUTE);
+//    	int sec = cal.get(Calendar.SECOND);
+//    	String txId = dayOfYear + "" + hr + "" + min + "" + sec;
     	
-        this.dividedBlob = dividedBlob;
+        this.dividedBlob = newDividedBlob;
 	}
 
 	/**
@@ -170,25 +167,25 @@ public class SagesOdkMessage extends SagesSmsMessage{
 	 * Example usage:
 	 * ArrayList<String> dividedBlob = divideTextAddHeader(smsText, MULTIPART_SMS_SIZE, ENCODING_SMS_SIZE, formId);
 	 * 
-	 * @param smsText
+	 * @param smsTextToProcess
 	 * @param segSize
 	 * @param allowedInfoSize
 	 * @param formId
 	 * @return
 	 */
-	private ArrayList<String> divideTextAddHeader(String smsText, int segSize, int allowedInfoSize, String formId) {
+	private ArrayList<String> divideTextAddHeader(String smsTextToProcess, int segSize, int allowedInfoSize, String formIdToProcess) {
 		ArrayList<String> dividedText = new ArrayList<String>();
-		int numSegs = (int) Math.round(smsText.length() / (double) segSize);
-		int start = 0;
-		int end = segSize -1;
+//		int numSegs = (int) Math.round(smsTextToProcess.length() / (double) segSize);
+//		int start = 0;
+//		int end = segSize -1;
 		//int allowedInfoSize = 130;
 		
-		String tmpString = "";
+//		String tmpString = "";
 //		String[] s = StringUtils.splitPreserveAllTokens(smsText, null, numSegs);
 //TODO		String[] s = DataChunker.chunkData(smsText);
 		Log.d("chunk before", "txidcur=" + txIdCur);
 		DataChunker dchunker = new DataChunker();
-		Map<String,String> s = dchunker.chunkDataWithHeaderGo(smsText, segSize, allowedInfoSize /*formId*/);
+		Map<String,String> s = dchunker.chunkDataWithHeaderGo(smsTextToProcess, segSize, allowedInfoSize /*formId*/);
 //		Map<String,String> s = DataChunker.chunkDataWithHeader(smsText, txIdCur/*, formId*/);
 		txIdCur = dchunker.getTxId();
 		Log.d("chunk after", "txidcur=" + txIdCur);
@@ -219,7 +216,7 @@ public class SagesOdkMessage extends SagesSmsMessage{
 		return dividedBlob;
 	}
 	
-	public void testHook(String smsText){
-		this.processSmsText(smsText);
+	public void testHook(String smsTextToProcess){
+		this.processSmsText(smsTextToProcess);
 	}
 }
