@@ -69,6 +69,7 @@ public class OdkSagesSmsReceiver extends SagesSmsReceiver {
 	 * @param body
 	 * @throws SagesKeyException 
 	 */
+	@Override
 	protected void handleUnknownMessage(Context context, Intent intent, String sender, String body) {
 		
 		Intent broadcast = new Intent(ODK_SMS_RECEIVED);

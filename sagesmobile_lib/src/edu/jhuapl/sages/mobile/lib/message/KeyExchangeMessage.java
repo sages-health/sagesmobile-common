@@ -76,15 +76,15 @@ public class KeyExchangeMessage extends SagesMessage {
 		if (this.getSender() == null){
 			throw new SagesKeyException("Null value for sender of the key. Unable to process key for a sender.");
 		}
-		SagesKey key = null;
+		SagesKey newKey = null;
 		if (body.getBody().contains(SagesMessage.my_key)){
 			String keyText = (body.getBody()).substring(SagesMessage.my_key.length());
 			if (keyType.contains("aes")){
-				key = new SagesPrivateKey(null, this.getSender(), null, keyText.getBytes());
+				newKey = new SagesPrivateKey(null, this.getSender(), null, keyText.getBytes());
 			} else {
-				key =  new SagesPublicKey(null, this.getSender(), null, keyText.getBytes());
+				newKey =  new SagesPublicKey(null, this.getSender(), null, keyText.getBytes());
 			}
-			this.setKey(key);
+			this.setKey(newKey);
 		} else {
 			throw new SagesKeyException("key exchange message is missing the sender's key");
 		}

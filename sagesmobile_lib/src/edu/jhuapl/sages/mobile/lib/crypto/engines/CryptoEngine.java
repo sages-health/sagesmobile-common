@@ -71,31 +71,31 @@ public class CryptoEngine {
 		return decrypted;
 	}
 
-	private  byte[] encrypt(byte[] raw, byte[] clear) throws Exception {
-		cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
-		byte[] encrypted = cipher.doFinal(clear);
-		return encrypted;
-	}
-	
-	private  byte[] decrypt(byte[] raw, byte[] encrypted) throws Exception {
-		cipher.init(Cipher.DECRYPT_MODE, skeySpec);
-		byte[] decrypted = cipher.doFinal(encrypted);
-		return decrypted;
-	}
-	
-	private static byte[] encryptS(byte[] raw, byte[] clear) throws Exception {
-		SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
-		Cipher cipher = Cipher.getInstance("AES");
-		cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
-		byte[] encrypted = cipher.doFinal(clear);
-		return encrypted;
-	}
-	
-	private static byte[] decryptS(byte[] raw, byte[] encrypted) throws Exception {
-		SecretKeySpec skKeySpec = new SecretKeySpec(raw, "AES");
-		Cipher cipher = Cipher.getInstance("AES");
-		cipher.init(Cipher.DECRYPT_MODE, skKeySpec);
-		byte[] decrypted = cipher.doFinal(encrypted);
-		return decrypted;
-	}
+//	private  byte[] encrypt(byte[] raw, byte[] clear) throws Exception {
+//		cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
+//		byte[] encrypted = cipher.doFinal(clear);
+//		return encrypted;
+//	}
+//	
+//	private  byte[] decrypt(byte[] raw, byte[] encrypted) throws Exception {
+//		cipher.init(Cipher.DECRYPT_MODE, skeySpec);
+//		byte[] decrypted = cipher.doFinal(encrypted);
+//		return decrypted;
+//	}
+//	
+//	private static byte[] encryptS(byte[] raw, byte[] clear) throws Exception {
+//		SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
+//		Cipher cipher = Cipher.getInstance("AES");
+//		cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
+//		byte[] encrypted = cipher.doFinal(clear);
+//		return encrypted;
+//	}
+//	
+//	private static byte[] decryptS(byte[] raw, byte[] encrypted) throws Exception {
+//		SecretKeySpec skKeySpec = new SecretKeySpec(raw, "AES");
+//		Cipher cipher = Cipher.getInstance("AES");
+//		cipher.init(Cipher.DECRYPT_MODE, skKeySpec);
+//		byte[] decrypted = cipher.doFinal(encrypted);
+//		return decrypted;
+//	}
 }

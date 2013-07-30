@@ -58,14 +58,14 @@ public class SagesKeyTest extends AndroidTestCase {
 	 * - Keystorefile is left blank or is wrong
 	 * 
 	 */
+	@Override
 	public void setUp(){
 		this.context = getContext();
 		
 		keyStoreFile = new File(Environment.getExternalStorageDirectory() + "/sageslib_testout");
 		
-		boolean success = true;
 		if (!keyStoreFile.exists()) {
-			success = keyStoreFile.mkdir(); 
+			keyStoreFile.mkdir(); 
 			assertTrue(true);
 		}
 	}
@@ -74,9 +74,8 @@ public class SagesKeyTest extends AndroidTestCase {
 		assertTrue(true);
 		keyStoreFile = new File(Environment.getExternalStorageDirectory() + "/sageslib_testout");
 		
-		boolean success = true;
 		if (!keyStoreFile.exists()) {
-			success = keyStoreFile.mkdir(); 
+			keyStoreFile.mkdir(); 
 			assertTrue(true);
 		}
 		

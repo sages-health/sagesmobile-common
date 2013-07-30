@@ -33,13 +33,8 @@ import android.content.Context;
  * @date 05/02/13
  */
 public class SagesPublicKey extends SagesKey {
-
-	private String tag = "public_";
-	
 	public SagesPublicKey(Context context, String locationId, String[] params, byte[] data) {
 		super(context, locationId, params, data);
-		super.tag = tag;
+		super.tag = "public_";
 	}
-
-
 }

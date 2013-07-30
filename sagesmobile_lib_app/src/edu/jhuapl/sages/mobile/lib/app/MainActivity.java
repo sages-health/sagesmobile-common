@@ -69,7 +69,7 @@ public class MainActivity extends Activity {
 	
 	private static TelephonyManager tMgr; 
 	public static  String NUMBER_THIS_DEVICE;
-	private static int CONTACT_DEVICE_INDEX = 0;
+//	private static int CONTACT_DEVICE_INDEX = 0;
 	
 	private String  recipientId = null;
 	private static SagesKeyStore keystore;

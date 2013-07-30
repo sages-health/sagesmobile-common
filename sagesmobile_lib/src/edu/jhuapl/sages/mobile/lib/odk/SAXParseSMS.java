@@ -145,11 +145,13 @@ public class SAXParseSMS extends DefaultHandler {
 		}
 	}
 
+	@Override
 	public void startDocument(){
 		System.out.println("*START DOC*");
 		count++;
 	}
 	
+	@Override
 	public void endDocument(){
 		System.out.println("*END DOC*");
 		if (useFieldTags()){
@@ -167,6 +169,7 @@ public class SAXParseSMS extends DefaultHandler {
 		count = -1;
 		lastTag = null;
 	}
+	@Override
 	public void startElement(String uri, String name, String qName, Attributes atts) {
 		System.out.println("_start_name: " + name + ", qname: " + qName);
 		System.out.println("atts: " + atts.getValue(0));
@@ -291,11 +294,13 @@ public class SAXParseSMS extends DefaultHandler {
 */
 	}
 
+	@Override
 	public void endElement(String uri, String name, String qName) {
 		System.out.println("_end_name: " + name + ", qname: " + qName);
 	}
 
 	//TODO: POKU need handling for formatted SMS also
+	@Override
 	public void characters(char ch[], int start, int length) {
 		
 /*			for (int i = start; i < start + length; i++) {

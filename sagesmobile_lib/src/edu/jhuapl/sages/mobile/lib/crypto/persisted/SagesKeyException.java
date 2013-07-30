@@ -31,6 +31,7 @@ package edu.jhuapl.sages.mobile.lib.crypto.persisted;
  * @date 05/03/13
  */
 public class SagesKeyException extends Exception {
+	private static final long serialVersionUID = 1L;
 
 	public SagesKeyException(String message, Exception e) {
 		super(message, e);

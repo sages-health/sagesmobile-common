@@ -87,7 +87,7 @@ public class SagesSmsReceiver extends BroadcastReceiver {
 			 *  
 			 * if sms body contains the text for "data", and also "enc aes" then process as an encrypted msg
 			 */
-			boolean keyExchangeSuccess = false;
+//			boolean keyExchangeSuccess = false;
 			try {
 				if (body.contains(SagesMessage.data)){
 					DataMessage dataMsg = new DataMessage();
@@ -106,12 +106,12 @@ public class SagesSmsReceiver extends BroadcastReceiver {
 						SagesPrivateKey dummy_private_aes = (SagesPrivateKey) keystore.lookupKey("+12404759206", KeyEnum.PRIVATE);
 						try {
 							CryptoEngine crytpoengine = new CryptoEngine(dummy_private_aes.getData());
-							String b64Encoded = dataMsg.getBody().getBody();
+//							String b64Encoded = dataMsg.getBody().getBody();
 
 							byte[] b64EncodedCipher = (dataMsg.getBody().getBody().getBytes());
 							byte[] b64DecodedCipher = Base64.decode(b64EncodedCipher, Base64.DEFAULT);
 							byte[] decryptedMsg = crytpoengine.decrypt(b64DecodedCipher);
-							String raw = new String(decryptedMsg);
+//							String raw = new String(decryptedMsg);
 							
 							Intent intentDecrypt = new Intent(context, ShowDecryptedMessageActivity.class);
 							intentDecrypt.putExtra("msg_body", body);

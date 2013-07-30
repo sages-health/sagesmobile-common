@@ -29,7 +29,6 @@ import edu.jhuapl.sages.mobile.lib.crypto.persisted.SagesKey.KeyEnum;
 import edu.jhuapl.sages.mobile.lib.crypto.persisted.SagesKeyException;
 import edu.jhuapl.sages.mobile.lib.crypto.persisted.SagesKeyStore;
 import edu.jhuapl.sages.mobile.lib.crypto.persisted.SagesPublicKey;
-
 import android.content.Context;
 import android.os.Environment;
 import android.test.AndroidTestCase;
@@ -48,6 +47,7 @@ public class SagesKeyStoreTest extends AndroidTestCase {
 	private Context context;
 	public static final String keystorepath_sdcard = Environment.getExternalStorageDirectory() + "/sages_keystore_test";
 	
+	@Override
 	public void setUp(){
 		context = getContext();
 		File file = new File(keystorepath_sdcard);
@@ -69,6 +69,7 @@ public class SagesKeyStoreTest extends AndroidTestCase {
 	
 	public void testNullFile() {
 		try {
+			@SuppressWarnings("unused")
 			SagesKeyStore nullStore = new SagesKeyStore(null);
 			fail("SagesKeyException should have been thrown for a null file parameter.");
 		} catch (SagesKeyException e) {
@@ -78,6 +79,7 @@ public class SagesKeyStoreTest extends AndroidTestCase {
 	public void testNewStoreWhenAlreadyExists() {
 		File file = new File(keystorepath_sdcard);
 		try {
+			@SuppressWarnings("unused")
 			SagesKeyStore newStore = new SagesKeyStore(file);
 			newStore = new SagesKeyStore(file);
 		} catch (SagesKeyException e) {
