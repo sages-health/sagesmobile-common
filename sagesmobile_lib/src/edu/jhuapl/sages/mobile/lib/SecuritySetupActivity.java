@@ -31,6 +31,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -78,25 +79,28 @@ public class SecuritySetupActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_security_setup);
 
-        setPreferencesFileName();
-        try {
-            so = new SharedObjects();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        }
-
-        prefs = this.getSharedPreferences(prefsFileName, Context.MODE_PRIVATE);
-
         // View objects
         btnGenAesKey = (Button) findViewById(R.id.btn_makeaeskey);
         txtAesKeyVal = (EditText) findViewById(R.id.txt_aeskey);
         tglEncryptionOnOff = (ToggleButton) findViewById(R.id.tgl_encryption);
+        
+        setPreferencesFileName();
+        prefs = this.getSharedPreferences(prefsFileName, Context.MODE_PRIVATE);
 
         String aeskey = prefs.getString(KEY_AESKEY, no_key_set);
         txtAesKeyVal.setText(aeskey);
-        if (!no_key_set.equals(aeskey)) {
+        
+        // initialize dummy key if user has not set key yet
+        if (no_key_set.equals(aeskey)) {
+        	btnGenAesKey.setEnabled(false);
+        	try {
+        		so = new SharedObjects();
+        	} catch (NoSuchAlgorithmException e) {
+        		e.printStackTrace();
+        	} catch (NoSuchPaddingException e) {
+        		e.printStackTrace();
+        	}
+        } else if (!no_key_set.equals(aeskey)) {
             TextView aeskeyview = (TextView) findViewById(R.id.txtv_aeskey);
             btnGenAesKey.setEnabled(true);
             try {
@@ -108,8 +112,6 @@ public class SecuritySetupActivity extends Activity {
                 aeskeyview.setText("Error re-initializing system KEY from saved preferences");
                 e.printStackTrace();
             }
-        } else {
-            btnGenAesKey.setEnabled(false);
         }
 
         txtAesKeyVal.addTextChangedListener(new TextWatcher() {
@@ -179,10 +181,16 @@ public class SecuritySetupActivity extends Activity {
             layout.removeView(tglEncryptionOnOff);
         }
 
-
-
     }
 
+    
+    @Override
+    protected void onResume() {
+    	Log.d("sages security", "Resuming Security Activity");
+    	super.onResume();
+    	
+    }
+    
     protected void setPreferencesFileName() {
         prefsFileName = "edu.jhuapl.sages.mobile.lib.app";
     }
