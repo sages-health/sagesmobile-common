@@ -33,14 +33,15 @@ package edu.jhuapl.sages.mobile.lib;
  * @date 05/28/13
  */
 public class RapidAndroidSecuritySetupActivity extends SecuritySetupActivity {
-
+	public static final String RA_PREFS_FILE_NAME = "edu.jhuapl.sages.mobile.lib.RapidAndroid";
+	
     public RapidAndroidSecuritySetupActivity() {
         super.showEncryptionToggle = false;
     }
 
     @Override
     protected void setPreferencesFileName() {
-        this.prefsFileName = "edu.jhuapl.sages.mobile.lib.RapidAndroid";
+        this.prefsFileName = RA_PREFS_FILE_NAME;
     }
 
 }

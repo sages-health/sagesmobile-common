@@ -25,6 +25,10 @@
 ********************************************************************************/
 package edu.jhuapl.sages.mobile.lib;
 
+import java.security.NoSuchAlgorithmException;
+
+import javax.crypto.NoSuchPaddingException;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -41,10 +45,6 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.ToggleButton;
-
-import java.security.NoSuchAlgorithmException;
-
-import javax.crypto.NoSuchPaddingException;
 
 
 /**

@@ -43,7 +43,7 @@ import android.content.Intent;
 public class RapidAndroidSagesSmsReceiver extends SagesSmsReceiver {
 
 	
-	private static final String RAPIDANDROID_SMS_RECEIVED = "edu.jhuapl.sages.mobile.lib.android.provider.Telephony.RAPIDANDROID_SMS_RECEIVED";
+	public static final String RAPIDANDROID_SMS_RECEIVED = "edu.jhuapl.sages.mobile.lib.android.provider.Telephony.RAPIDANDROID_SMS_RECEIVED";
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {

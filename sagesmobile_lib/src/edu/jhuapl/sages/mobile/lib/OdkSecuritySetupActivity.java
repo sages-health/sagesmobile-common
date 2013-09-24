@@ -33,8 +33,10 @@ package edu.jhuapl.sages.mobile.lib;
  */
 public class OdkSecuritySetupActivity extends SecuritySetupActivity {
 
+	public static final String ODK_PREFS_FILE_NAME = "edu.jhuapl.sages.mobile.lib.ODK";
+	
     @Override
     protected void setPreferencesFileName() {
-        this.prefsFileName = "edu.jhuapl.sages.mobile.lib.ODK";
+        this.prefsFileName = ODK_PREFS_FILE_NAME;
     }
 }

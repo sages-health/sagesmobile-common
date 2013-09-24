@@ -62,6 +62,9 @@ public class SharedObjects {
         Log.i(SharedObjects.class.getName(), "updated CryptoEnginge.");
     }
 
+    public static void reinitCryptoEngine(String keyVal) throws NoSuchAlgorithmException, NoSuchPaddingException {
+    	updateCryptoEngine(keyVal);
+    }
     public static boolean isEncryptionOn() {
         return isEncryptionOn;
     }
